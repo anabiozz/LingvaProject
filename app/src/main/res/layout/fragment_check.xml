@@ -1,0 +1,116 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/musician6"
+            android:contentDescription="@string/description"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="40dp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/mainDataTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="60sp"
+            android:text="text"/>
+
+        <LinearLayout
+            android:id="@+id/LinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <RadioButton
+                    android:id="@+id/chk1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10sp"
+                    android:textColor="#000000"
+                    android:textSize="25sp" />
+
+                <RadioButton
+                    android:id="@+id/chk2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:checked="true"
+                    android:textColor="#000000"
+                    android:textSize="25sp" />
+
+                <RadioButton
+                    android:id="@+id/chk3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:checked="true"
+                    android:textColor="#000000"
+                    android:textSize="25sp" />
+
+                <RadioButton
+                    android:id="@+id/chk4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#000000"
+                    android:textSize="25sp" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/btnCheck"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorAccent"
+                    android:text="@string/proseed"
+                    android:gravity="center"
+                    android:textColor="@color/colorTextPrimaryLight"
+                    android:padding="12dp"
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

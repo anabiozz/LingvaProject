@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/vk_grey_color">
+
+    <TextView
+        android:id="@+id/textStartDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="25dp"
+        android:layout_marginTop="25dp"
+        android:padding="12dp"
+        android:text="Для регистрации вы можете использовать аккаунт в VK. В дальнейшем вы можете авторизоваться при нажатии на иконку VK в правом верхнем углу навигационной панели"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/yesVk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:padding="12dp"
+        android:layout_marginBottom="15dp"
+        android:text="да, залогиниться с помощью аккаунта VK"
+        android:textColor="#fff"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/nothx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="нет, спасибо"
+        android:textColor="#fff"
+        android:textSize="12sp" />
+
+</LinearLayout>
