@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,6 +51,7 @@ public class AddOwnWordsFragment extends Fragment implements OnClickListener{
 	AutoCompleteTextView    nativWordEditText;
 	Button      			addButton;
 	Button  				proseedToLesson;
+	TextInputLayout textInputLayout1, textInputLayout2;
 
 	MainDb mainDb;
 
@@ -81,6 +83,8 @@ public class AddOwnWordsFragment extends Fragment implements OnClickListener{
 		nativWordEditText =   (AutoCompleteTextView ) v.findViewById(R.id.nativ_word);
 		addButton = 		  (Button) v.findViewById(R.id.button_add);
 		proseedToLesson =     (Button) v.findViewById(R.id.proseedToLesson);
+		textInputLayout1 = (TextInputLayout)v.findViewById(R.id.foreign_word_layout);
+		textInputLayout2 = (TextInputLayout)v.findViewById(R.id.nativ_layout);
 
 		proseedToLesson.setOnClickListener(this);
 		addButton.setOnClickListener(this);
@@ -208,7 +212,7 @@ public class AddOwnWordsFragment extends Fragment implements OnClickListener{
 						mainDbForUser.createTable(Tables.getTableMain());
 						mainDbForUser.insert(Tables.getTableMain());
 
-						if (mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
+						if (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
 
 							for (int i = 0; i < 10; i++) {
 
@@ -217,11 +221,11 @@ public class AddOwnWordsFragment extends Fragment implements OnClickListener{
 								mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
 							}
 						}
-						Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
+						Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
 					}else {
 
 						Tables.setTableMain("user" + "_" + user.id);
-						Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
+						Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
 					}
 				}
 			});
@@ -253,7 +257,7 @@ public class AddOwnWordsFragment extends Fragment implements OnClickListener{
 				mainDbForUser.createTable(Tables.getTableMain());
 				mainDbForUser.insert(Tables.getTableMain());
 
-				if (mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
+				if (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
 
 					for (int i = 0; i < 10; i++) {
 
@@ -269,7 +273,7 @@ public class AddOwnWordsFragment extends Fragment implements OnClickListener{
 		@Override
 		protected void onPostExecute(Void aVoid) {
 			super.onPostExecute(aVoid);
-			Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
+			Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
 
 			//linlaHeaderProgress.setVisibility(View.GONE);
 		}
@@ -307,7 +311,7 @@ public class AddOwnWordsFragment extends Fragment implements OnClickListener{
 	public void onClick(View v) {
 		switch(v.getId()) {
 			case R.id.proseedToLesson:
-				if(mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN) != 0) {
+				if(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN) != 0) {
 					utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_3));
 					utils.transactions(getFragmentManager(), new OwnLessonFragment());
 
@@ -349,6 +353,8 @@ public class AddOwnWordsFragment extends Fragment implements OnClickListener{
 
 	private void font() {
 		Typeface type2 = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFONT);
+		textInputLayout1.setTypeface(type2);
+		textInputLayout2.setTypeface(type2);
 		foreignWordEditText.setTypeface(type2);
 		nativWordEditText.setTypeface(type2);
 		addButton.setTypeface(type2);

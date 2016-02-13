@@ -2,7 +2,6 @@ package com.almexe.lingvaproject.pages;
 
 import android.app.Dialog;
 import android.app.Fragment;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.media.AudioManager;
@@ -26,24 +25,9 @@ import com.almexe.lingvaproject.Driver;
 import com.almexe.lingvaproject.R;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
-import com.almexe.lingvaproject.db.UserDb;
-import com.almexe.lingvaproject.utils.CircleTransform;
 import com.almexe.lingvaproject.utils.Constants;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
-import com.squareup.picasso.Picasso;
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKCallback;
-import com.vk.sdk.VKScope;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKParameters;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKApiUser;
-import com.vk.sdk.api.model.VKList;
 
 import org.ispeech.SpeechSynthesis;
 import org.ispeech.error.BusyException;
@@ -60,11 +44,11 @@ public class CheckFragment extends Fragment implements OnClickListener{
 
     Button              btnCheck;
     public static TextView		    mainDataTextView, countWord;
-    RadioButton                     chk1, chk2, chk3, chk4, radioSexButton;
+    RadioButton                     chk1, chk2, chk3, chk4, checkedButton;
     String wordsFromTextView;
     RadioGroup radioGroup;
     String rightResult;
-    String radioButtonWord, cuttedWord;
+    String wordFromCheckedButton;
     int moveThoughtArray = 0;
     int count = 0;
     SpeechSynthesis synthesis;
@@ -77,7 +61,7 @@ public class CheckFragment extends Fragment implements OnClickListener{
     ArrayList<String> list = new ArrayList<>();
 
     //public static ArrayList<String> rightResultWords = new ArrayList<>();
-    public static ArrayList<String> wrongResultWords = new ArrayList<>();
+    public static ArrayList<String> wrongResultWords;
     private MainDb mainDb;
     private Utils utils;
 
@@ -93,25 +77,26 @@ public class CheckFragment extends Fragment implements OnClickListener{
 
         mainDbForUser = new MainDbForUser(getActivity());
         mainDb = new MainDb(getActivity());
-
+        wrongResultWords = new ArrayList<>();
         wrongResultWords.clear();
         utils = new Utils();
 
         mainDataTextView = (TextView)v.findViewById(R.id.mainDataTextView);
-        countWord =         (TextView)v.findViewById(R.id.countWord);
+        countWord = (TextView)v.findViewById(R.id.countWord);
 
-        btnCheck = 	   (Button)v.findViewById(R.id.btnCheck);
+        btnCheck = (Button)v.findViewById(R.id.btnCheck);
         chk1 = 	   (RadioButton)v.findViewById(R.id.chk1);
         chk2 = 	   (RadioButton)v.findViewById(R.id.chk2);
         chk3 = 	   (RadioButton)v.findViewById(R.id.chk3);
         chk4 = 	   (RadioButton)v.findViewById(R.id.chk4);
+
         radioGroup = (RadioGroup)v.findViewById(R.id.radioGroup);
         ImageButton voiceButton = (ImageButton) v.findViewById(R.id.voice);
         layout = inflater.inflate(R.layout.toast, (ViewGroup) v.findViewById(R.id.toast_layout_root));
         activity = (LinearLayout)v.findViewById(R.id.LinearLayout);
 
         try {
-            new AsyncClass().execute().get();
+            new ChangeWords().execute().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -179,7 +164,7 @@ public class CheckFragment extends Fragment implements OnClickListener{
         return list;
     }
 
-    private class AsyncClass extends AsyncTask<Void, Void, Void> {
+    private class ChangeWords extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -236,7 +221,7 @@ public class CheckFragment extends Fragment implements OnClickListener{
                 e.printStackTrace();
             }
 
-            if(moveThoughtArray != mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.TEN)-1) moveThoughtArray++;
+            if(moveThoughtArray != mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN)-1) moveThoughtArray++;
         }
     }
 
@@ -272,8 +257,8 @@ public class CheckFragment extends Fragment implements OnClickListener{
             case R.id.btnCheck:
                 try{
                     int selectedId = radioGroup.getCheckedRadioButtonId();
-                    radioSexButton = (RadioButton)getActivity().findViewById(selectedId);
-                    radioButtonWord = radioSexButton.getText().toString();
+                    checkedButton = (RadioButton)getActivity().findViewById(selectedId);
+                    wordFromCheckedButton = checkedButton.getText().toString();
                     wordsFromTextView = mainDataTextView.getText().toString();
 
                     chk1.setText(null);
@@ -281,7 +266,7 @@ public class CheckFragment extends Fragment implements OnClickListener{
                     chk3.setText(null);
                     chk4.setText(null);
 
-                    if(radioButtonWord.equals(cutTheSentence(rightResult))) {
+                    if(wordFromCheckedButton.equals(cutTheSentence(rightResult))) {
 
                         //rightResultWords.add(wordsFromTextView);
 
@@ -290,7 +275,7 @@ public class CheckFragment extends Fragment implements OnClickListener{
                     }
 
                     try {
-                        new AsyncClass().execute().get();
+                        new ChangeWords().execute().get();
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
                     }
@@ -322,6 +307,7 @@ public class CheckFragment extends Fragment implements OnClickListener{
 
 
                         }else{
+                            Log.e("wrongResultWords", String.valueOf(wrongResultWords));
                             //utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_1));
                             utils.transactions(getFragmentManager(), new WrongResultCheckFragment());
                         }

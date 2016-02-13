@@ -99,7 +99,7 @@ public class OwnLessonFragment extends Fragment implements OnClickListener{
 
 		wordCount = 0;
 
-		if(mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN) == 0){
+		if(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN) == 0){
 			deleteWord.setEnabled(false);
 		}else{
 
@@ -107,7 +107,7 @@ public class OwnLessonFragment extends Fragment implements OnClickListener{
 					MainDbForUser.OWN).get(wordCount)));
 			tranlate.setText(mainDb.getTranslateById(mainDbForUser.getListId(Tables.getTableMain(),
 					MainDbForUser.OWN).get(wordCount)));
-			countWord.setText(count + "/" + mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN));
+			countWord.setText(count + "/" + mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN));
 
 			mainDataTextView.setOnTouchListener(new View.OnTouchListener() {
 				@Override
@@ -241,7 +241,7 @@ public class OwnLessonFragment extends Fragment implements OnClickListener{
 						mainDbForUser.createTable(Tables.getTableMain());
 						mainDbForUser.insert(Tables.getTableMain());
 
-						if (mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
+						if (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
 
 							for (int i = 0; i < 10; i++) {
 
@@ -250,11 +250,11 @@ public class OwnLessonFragment extends Fragment implements OnClickListener{
 								mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
 							}
 						}
-						Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
+						Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
 					}else {
 
 						Tables.setTableMain("user" + "_" + user.id);
-						Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
+						Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
 					}
 				}
 			});
@@ -286,7 +286,7 @@ public class OwnLessonFragment extends Fragment implements OnClickListener{
 				mainDbForUser.createTable(Tables.getTableMain());
 				mainDbForUser.insert(Tables.getTableMain());
 
-				if (mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
+				if (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
 
 					for (int i = 0; i < 10; i++) {
 
@@ -302,7 +302,7 @@ public class OwnLessonFragment extends Fragment implements OnClickListener{
 		@Override
 		protected void onPostExecute(Void aVoid) {
 			super.onPostExecute(aVoid);
-			Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
+			Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
 
 			//linlaHeaderProgress.setVisibility(View.GONE);
 		}
@@ -326,7 +326,7 @@ public class OwnLessonFragment extends Fragment implements OnClickListener{
 
 				@Override
 				public boolean onSingleTapConfirmed(MotionEvent e) {
-					if(mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN) != 0){
+					if(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN) != 0){
 						if(mainDataTextView.getText().equals(mainDb.readNowNative(mainDbForUser.getListId(Tables.getTableMain(),
 								MainDbForUser.OWN).get(wordCount)))){
 
@@ -346,12 +346,12 @@ public class OwnLessonFragment extends Fragment implements OnClickListener{
 
 					if (e1.getX() > e2.getX()) {
 						++wordCount;
-						if(wordCount != mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN)){
+						if(wordCount != mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN)){
 							mainDataTextView.setText(mainDb.readNextForegin(mainDbForUser.getListId(Tables.getTableMain(),
 									MainDbForUser.OWN).get(wordCount)));
 							tranlate.setText(mainDb.readNowTrans(mainDbForUser.getListId(Tables.getTableMain(),
 									MainDbForUser.OWN).get(wordCount)));
-							countWord.setText(++count + "/" + mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN));
+							countWord.setText(++count + "/" + mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN));
 
 						}else{
 							wordCount = 0;
@@ -360,7 +360,7 @@ public class OwnLessonFragment extends Fragment implements OnClickListener{
 									MainDbForUser.OWN).get(wordCount)));
 							tranlate.setText(mainDb.readNowTrans(mainDbForUser.getListId(Tables.getTableMain(),
 									MainDbForUser.OWN).get(wordCount)));
-							countWord.setText(++count + "/" + mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN));
+							countWord.setText(++count + "/" + mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN));
 						}
 					}
 					// Swipe right (previous)
@@ -371,15 +371,15 @@ public class OwnLessonFragment extends Fragment implements OnClickListener{
 									MainDbForUser.OWN).get(wordCount)));
 							tranlate.setText(mainDb.readNowTrans(mainDbForUser.getListId(Tables.getTableMain(),
 									MainDbForUser.OWN).get(wordCount)));
-							countWord.setText(--count + "/" + mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN));
+							countWord.setText(--count + "/" + mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN));
 						}else{
-							wordCount = mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN) - 1;
-							count = mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN) + 1;
+							wordCount = mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN) - 1;
+							count = mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN) + 1;
 							mainDataTextView.setText(mainDb.readPreviousForegin(mainDbForUser.getListId(Tables.getTableMain(),
 									MainDbForUser.OWN).get(wordCount)));
 							tranlate.setText(mainDb.readNowTrans(mainDbForUser.getListId(Tables.getTableMain(),
 									MainDbForUser.OWN).get(wordCount)));
-							countWord.setText(--count + "/" + mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN));
+							countWord.setText(--count + "/" + mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN));
 						}
 					}
 					return true;
@@ -425,16 +425,16 @@ public class OwnLessonFragment extends Fragment implements OnClickListener{
 					deleteFromList();
 
 					if(mainDb.isRowExists(wordsFromTextView))
-						mainDbForUser.updateToZiro(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(wordsFromTextView));
+						mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(wordsFromTextView));
 					else
-						mainDbForUser.updateToZiro(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
+						mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
 
 					--wordCount;
 					mainDataTextView.setText(mainDb.readPreviousForegin(mainDbForUser.getListId(Tables.getTableMain(),
 							MainDbForUser.OWN).get(wordCount)));
 					tranlate.setText(mainDb.readNowTrans(mainDbForUser.getListId(Tables.getTableMain(),
 							MainDbForUser.OWN).get(wordCount)));
-					countWord.setText(--count + "/" + mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN));
+					countWord.setText(--count + "/" + mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN));
 				}
 
 				if((mainDb.getWordById(mainDbForUser.getListId(Tables.getTableMain(),MainDbForUser.OWN).get(0)).equals(wordsFromTextView))
@@ -445,35 +445,35 @@ public class OwnLessonFragment extends Fragment implements OnClickListener{
 					deleteFromList();
 
 					if(mainDb.isRowExists(wordsFromTextView))
-						mainDbForUser.updateToZiro(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(wordsFromTextView));
+						mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(wordsFromTextView));
 					else
-						mainDbForUser.updateToZiro(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
+						mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
 
 					mainDataTextView.setText(mainDb.readNowForegin(mainDbForUser.getListId(Tables.getTableMain(),
 							MainDbForUser.OWN).get(wordCount)));
 					tranlate.setText(mainDb.readNowTrans(mainDbForUser.getListId(Tables.getTableMain(),
 							MainDbForUser.OWN).get(wordCount)));
-					countWord.setText(count + "/" + mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN));
+					countWord.setText(count + "/" + mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN));
 				}
 
 				if(mainDb.getWordById(mainDbForUser.getListId(Tables.getTableMain(),MainDbForUser.OWN).get(0)).equals(wordsFromTextView)
-						&& mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN) == 1){
+						&& mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN) == 1){
 
 					if(mainDb.isRowExists(wordsFromTextView))
-						mainDbForUser.updateToZiro(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(wordsFromTextView));
+						mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(wordsFromTextView));
 					else
-						mainDbForUser.updateToZiro(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
+						mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
 
 					utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_1));
 					utils.transactions(getFragmentManager(), new LessonTenWordFragment());
 
 				}else if(mainDb.getNativeWordById(mainDbForUser.getListId(Tables.getTableMain(),MainDbForUser.OWN).get(0)).equals(wordsFromTextView)
-						&& mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.OWN) == 1){
+						&& mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN) == 1){
 
 					if(mainDb.isRowExists(wordsFromTextView))
-						mainDbForUser.updateToZiro(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(wordsFromTextView));
+						mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(wordsFromTextView));
 					else
-						mainDbForUser.updateToZiro(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
+						mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
 
 					utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_1));
 					utils.transactions(getFragmentManager(), new LessonTenWordFragment());
@@ -498,8 +498,8 @@ public class OwnLessonFragment extends Fragment implements OnClickListener{
 
 	private void updateToZiro(){
 		if(mainDb.getForeinWordById(mainDbForUser.getListId(Tables.getTableMain(),MainDbForUser.OWN).get(0)).equals(wordsFromTextView))
-			mainDbForUser.updateToZiro(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(wordsFromTextView));
+			mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(wordsFromTextView));
 		else
-			mainDbForUser.updateToZiro(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
+			mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
 	}
 }

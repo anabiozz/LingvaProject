@@ -52,7 +52,7 @@
                 android:id="@+id/radioGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <RadioButton
                     android:id="@+id/chk1"
@@ -62,7 +62,8 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10sp"
                     android:textColor="#000000"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:theme="@style/MyColor"/>
 
                 <RadioButton
                     android:id="@+id/chk2"
@@ -72,7 +73,8 @@
                     android:layout_marginLeft="10dp"
                     android:checked="true"
                     android:textColor="#000000"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:theme="@style/MyColor"/>
 
                 <RadioButton
                     android:id="@+id/chk3"
@@ -82,7 +84,8 @@
                     android:layout_marginLeft="10dp"
                     android:checked="true"
                     android:textColor="#000000"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:theme="@style/MyColor"/>
 
                 <RadioButton
                     android:id="@+id/chk4"
@@ -90,7 +93,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:textColor="#000000"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:theme="@style/MyColor"/>
             </RadioGroup>
 
             <LinearLayout

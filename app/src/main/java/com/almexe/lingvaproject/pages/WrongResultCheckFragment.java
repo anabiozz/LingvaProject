@@ -1,7 +1,6 @@
 package com.almexe.lingvaproject.pages;
 
 import android.app.Fragment;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,12 +22,8 @@ import com.almexe.lingvaproject.adapter.WordsListAdapter;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
 import com.almexe.lingvaproject.utils.Constants;
-import com.almexe.lingvaproject.utils.DrawerItemCustomAdapter;
-import com.almexe.lingvaproject.utils.ObjectDrawerItem;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
-import com.vk.sdk.api.model.VKApiPhoto;
-import com.vk.sdk.api.model.VKApiUser;
 
 import java.util.ArrayList;
 
@@ -38,15 +32,11 @@ public class WrongResultCheckFragment extends Fragment implements View.OnClickLi
     private TextView wrongResult;
     private TextView numberWrongResult;
     private Button resultButton;
-    private ListView listView;
 
     private ArrayList<String> list;
     private ArrayList<Integer> listId;
 
     private Utils utils;
-
-    int count;
-
     MainDbForUser mainDbForUser;
     private MainDb mainDb;
     RecyclerView rv;
@@ -126,12 +116,12 @@ public class WrongResultCheckFragment extends Fragment implements View.OnClickLi
     private ArrayList<String> createNativeListData() {
         ArrayList<String> data = new ArrayList<>();
         for(int i = 0; i < CheckFragment.wrongResultWords.size(); i++){
-            data.add( mainDb.getNativeWordByForeign(CheckFragment.wrongResultWords.get(i)));
+            data.add(mainDb.getNativeWordByForeign(CheckFragment.wrongResultWords.get(i)));
         }
         return data;
     }
 
-    private class background extends AsyncTask<Void, Void, Void> {
+    private class AddWordsToDectionary extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -177,7 +167,7 @@ public class WrongResultCheckFragment extends Fragment implements View.OnClickLi
         switch (view.getId()){
 
             case R.id.resultbutton:
-                new background().execute();
+                new AddWordsToDectionary().execute();
                 break;
         }
     }

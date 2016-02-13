@@ -2,10 +2,9 @@
 <resources>
     <color name="colorPrimary">#EC5159</color>
     <color name="colorPrimaryDark">#C50035</color>
-    <color name="colorPrimaryLight">#EC5159</color>
+    <color name="colorPrimaryLight">#3B8183</color>
 
     <color name="colorAccent">#3B8183</color>
-    <color name="genre">#7FC4B1</color>
 
     <color name="colorTextPrimary">#212121</color>
     <color name="colorTextPrimaryLight">#FFFFFF</color>
@@ -22,6 +21,7 @@
     <color name="list_row_end_color">#50d9d9d9</color>
     <color name="list_row_hover_start_color">#ebeef0</color>
     <color name="list_row_hover_end_color">#636363</color>
+
     <color name="colorBlack">#000</color>
     <color name="colorWhite">#fff</color>
 </resources>

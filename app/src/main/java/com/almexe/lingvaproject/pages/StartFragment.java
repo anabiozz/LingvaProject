@@ -2,7 +2,6 @@ package com.almexe.lingvaproject.pages;
 
 import android.app.Dialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -219,7 +217,7 @@ public class StartFragment extends Fragment{
                         mainDbForUser.createTable(Tables.getTableMain());
                         mainDbForUser.insert(Tables.getTableMain());
 
-                        if (mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
+                        if (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
 
                             for (int i = 0; i < 10; i++) {
 
@@ -228,11 +226,11 @@ public class StartFragment extends Fragment{
                                 mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
                             }
                         }
-                        Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
+                        Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
                     }else {
 
                         Tables.setTableMain("user" + "_" + user.id);
-                        Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
+                        Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
                     }
                 }
             });
@@ -266,7 +264,7 @@ public class StartFragment extends Fragment{
                 mainDbForUser.createTable(Tables.getTableMain());
                 mainDbForUser.insert(Tables.getTableMain());
 
-                if (mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
+                if (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
 
                     for (int i = 0; i < 10; i++) {
 
@@ -282,7 +280,7 @@ public class StartFragment extends Fragment{
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
+            Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
 
             linlaHeaderProgress.setVisibility(View.GONE);
         }
@@ -336,6 +334,8 @@ public class StartFragment extends Fragment{
         Typeface type2 = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFONT);
 
         text.setTypeface(type2);
+        button.setTypeface(type2);
+        buttonYesVk.setTypeface(type2);
 
         buttonYesVk.setOnClickListener(new View.OnClickListener() {
             @Override

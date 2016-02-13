@@ -196,13 +196,13 @@ public class MainDbForUser{
         mDb.execSQL("UPDATE "+table+" SET "+column+" = '1' WHERE "+ID+" = "+id+"");
     }
 
-    public void updateToZiro(String table, String column, int id){
+    public void updateToNull(String table, String column, int id){
         dbHelper  = new DbHelper(mContext);
         mDb = dbHelper.getReadableDatabase();
         mDb.execSQL("UPDATE "+table+" SET "+column+" = '0' WHERE "+ID+" = "+id+"");
     }
 
-    public void updateTo(String table, String column){
+    public void updateToNull(String table, String column){
         dbHelper  = new DbHelper(mContext);
         mDb = dbHelper.getReadableDatabase();
         mDb.execSQL("UPDATE "+table+" SET "+column+" = '0' WHERE "+column+" = '1'");
@@ -285,8 +285,7 @@ public class MainDbForUser{
         mDb.close();
     }
 
-
-    public int getCountTen(String table, String column) {
+    public int getCountLessonWordsFromTen (String table, String column) {
         String selectQuery = "SELECT COUNT("+column+") FROM " + table + " WHERE " + column + " = '1' ";
         dbHelper = new DbHelper(mContext);
         mDb = dbHelper.getReadableDatabase();
