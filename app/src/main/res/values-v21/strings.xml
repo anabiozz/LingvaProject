@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">lingvaApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="addForLearning">добавить в словарь</string>
+    <string name="exercise">тренировать</string>
+    <string name="learn_word">изучать</string>
+    <string name="dontlearn_word">отмена</string>
+    <string name="toLearnNewWords">изучать новые слова?</string>
+    <string name="menu">menu</string>
+    <string name="voice">озвучить</string>
+    <string name="wrongWords">неправильных слов</string>
+    <string name="nowrong">Вы не допустили ошибок Молодец</string>
+    <string name="OK">OK</string>
+    <string name="proseed">Далее</string>
+    <string name="allWords">всего слов</string>
+    <string name="learnedWords">выученных слов</string>
+    
+    <string name="proseedToLesson">продолжить</string>
+    <string name="button_add">добавить</string>
+    <string name="foreign_word">слово (English)</string>
+    <string name="nativ_word">перевод</string>
+    <string name="description">Description</string>
+    <string name="pref_size">Size</string>
+    <string name="donthavewords">у вас нет слов в словаре</string>
+    <string name="TOAST_MESSAGE_NO">вы должны написать слово и перевод</string>
+
+    <string name="navigation_item_1">Урок</string>
+    <string name="navigation_item_2">Добавить Слова в Словарь</string>
+    <string name="navigation_item_3">Словарь</string>
+    <string name="navigation_item_4">Выученные слова</string>
+    <string name="navigation_item_5">Настройки</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="logoutButton">выйти</string>
+    <string name="cancel">отмена</string>
+    <string name="yes_login_vk">да, залогиниться с помощью аккаунта VK</string>
+    <string name="long_speech_vk">Для регистрации вы можете использовать аккаунт в VK. В дальнейшем вы можете авторизоваться при нажатии на иконку VK в правом верхнем углу навигационной панели</string>
+
+    <integer name="com_vk_sdk_AppId">5172767</integer>
+
+    <integer name="allWords">6000</integer>
+
+</resources>

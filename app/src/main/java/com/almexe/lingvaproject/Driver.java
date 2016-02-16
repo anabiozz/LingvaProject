@@ -1,6 +1,7 @@
 package com.almexe.lingvaproject;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
@@ -16,10 +17,12 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,10 +34,12 @@ import com.almexe.lingvaproject.pages.AddOwnWordsFragment;
 import com.almexe.lingvaproject.pages.LearnedWordsFragment;
 import com.almexe.lingvaproject.pages.LessonTenWordFragment;
 import com.almexe.lingvaproject.pages.OwnLessonFragment;
+import com.almexe.lingvaproject.pages.Settings;
 import com.almexe.lingvaproject.pages.StartFragment;
 import com.almexe.lingvaproject.utils.CircleTransform;
 import com.almexe.lingvaproject.utils.Constants;
 import com.almexe.lingvaproject.utils.CustomTypefaceSpan;
+import com.almexe.lingvaproject.utils.LoginActivity;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -74,12 +79,27 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
     public static TextView numberlLearnedWords;
     public static ImageView imageViewVk;
 
+    private VKApiUser user;
+    private String[] scope = new String[]{VKScope.WALL, VKScope.PHOTOS};
+
+    private LinearLayout linlaHeaderProgress;
+    public static MainDb mainDb;
+    protected Context context;
+    private MainDbForUser mainDbForUser;
+    private UserDb userDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         utils = new Utils();
+
+        /*try {
+            new GetDataFromDb().execute().get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }*/
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -110,7 +130,8 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
 
         if (null == savedInstanceState) {
             utils.toolTitle(this,"LingvaApp");
-            utils.transactions(getFragmentManager(),new StartFragment());
+            utils.transactions(getFragmentManager(),StartFragment.getInstance(this));
+            //showLogin();
         } else {
             selectItem(mNavItemId);
         }
@@ -144,6 +165,33 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         numberAllWords.setTypeface(mainFont);
         numberlLearnedWords.setTypeface(mainFont);
     }
+
+    /*@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        VKCallback<VKAccessToken> callback = new VKCallback<VKAccessToken>() {
+            @Override
+            public void onResult(VKAccessToken res) {
+                try {
+                    new VkResponse().execute().get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(VKError error) {
+                try {
+                    new VkErrorResponse().execute().get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        if (!VKSdk.onActivityResult(requestCode, resultCode, data, callback)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }*/
 
     public void fontMenu(){
         Menu m = navigationView.getMenu();
@@ -230,7 +278,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         switch (position) {
 
         case 0:
-            fragment = new StartFragment();
+            fragment = StartFragment.getInstance(this);
             break;
 
         case R.id.navigation_item_1:
@@ -251,6 +299,10 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         case R.id.navigation_item_4:
             fragment = new LearnedWordsFragment();
             break;
+
+        case R.id.navigation_item_5:
+            fragment = new Settings();
+            break;
         default:
             break;
         }
@@ -270,4 +322,136 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
     public void setTitle(CharSequence title) {
         getSupportActionBar().setTitle(title);
     }
+
+    private class GetDataFromDb extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mainDb = new MainDb(Driver.this);
+            mainDbForUser = new MainDbForUser(Driver.this);
+            userDb = new UserDb(Driver.this);
+
+            try {
+                mainDb.createDataBase();
+            } catch (IOException ioe) {
+                throw new Error("Unable to create database");
+            }try {
+                mainDb.openDataBase();
+            } catch (Exception ioe) {
+                throw new Error("Unable to open database");
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+    }
+
+    private class VkResponse extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //linlaHeaderProgress.setVisibility(View.VISIBLE);
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "photo_200"));
+            request.executeWithListener(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+
+                    user = ((VKList<VKApiUser>) response.parsedModel).get(0);
+
+                    Driver.headerName.setText(user.first_name);
+                    Driver.headerLastName.setText(user.last_name);
+
+                    Picasso.with(Driver.this).load(user.photo_200).
+                            transform(new CircleTransform()).into(Driver.image);
+
+                    Driver.image.setVisibility(View.VISIBLE);
+
+                    if(!userDb.isRowExists(user.id)){
+                        UserDb.user_id = user.id;
+                        userDb.write();
+
+                        Tables.setTableMain("user" + "_" + user.id);
+
+                        mainDbForUser.createTable(Tables.getTableMain());
+                        mainDbForUser.insert(Tables.getTableMain());
+
+                        if (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
+
+                            for (int i = 0; i < 10; i++) {
+
+                                int result = mainDbForUser.getNumber(i, Tables.getTableMain());
+
+                                mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
+                            }
+                        }
+                        Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
+                    }else {
+
+                        Tables.setTableMain("user" + "_" + user.id);
+                        Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
+                    }
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            //linlaHeaderProgress.setVisibility(View.GONE);
+        }
+    }
+
+    private class VkErrorResponse extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //linlaHeaderProgress.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            Tables.setTableMain("defaultuser");
+
+            if(!mainDbForUser.isExists(Tables.getTableMain())) {
+
+                mainDbForUser.createTable(Tables.getTableMain());
+                mainDbForUser.insert(Tables.getTableMain());
+
+                if (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
+
+                    for (int i = 0; i < 10; i++) {
+
+                        int result = mainDbForUser.getNumber(i, Tables.getTableMain());
+
+                        mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
+
+            //linlaHeaderProgress.setVisibility(View.GONE);
+        }
+    }
+
 }

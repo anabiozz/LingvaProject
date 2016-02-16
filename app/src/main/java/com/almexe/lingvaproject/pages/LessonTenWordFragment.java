@@ -56,7 +56,7 @@ import org.ispeech.error.NoNetworkException;
 
 import java.util.concurrent.ExecutionException;
 
-public class LessonTenWordFragment extends Fragment implements OnClickListener {
+public class LessonTenWordFragment extends AbstractFragment implements OnClickListener {
 
     ImageButton  addForLearning;
     public static TextView mainDataTextView;
@@ -71,15 +71,10 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     int count = 1;
 
     private Utils utils;
-
-    private VKApiUser user;
-
     private MainDbForUser mainDbForUser;
     MainDb mainDb;
     static int wordCount = 0;
 
-    private String[] scope = new String[]{VKScope.WALL, VKScope.PHOTOS};
-    private UserDb userDb;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,7 +95,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         synthesis.setStreamType(AudioManager.STREAM_MUSIC);
         /***************************************************/
         /*Login/Logout Button*/
-        VkLogoutLogin();
+        Vkloginlogout();
     }
 
     /*******************************************************************************************/
@@ -149,139 +144,6 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         });
 
         return v;
-    }
-
-    /*****************************************************************************************/
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
-            @Override
-            public void onResult(final VKAccessToken res) {
-
-                try {
-                    new VkResponse().execute().get();
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onError(VKError error) {
-
-                try {
-                    new VkErrorResponse().execute().get();
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-        })) {}
-    }
-    /*******************************************************************************************/
-    private class VkResponse extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //linlaHeaderProgress.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "photo_200"));
-            request.executeWithListener(new VKRequest.VKRequestListener() {
-                @Override
-                public void onComplete(VKResponse response) {
-                    super.onComplete(response);
-
-                    user = ((VKList<VKApiUser>) response.parsedModel).get(0);
-
-                    Driver.headerName.setText(user.first_name);
-                    Driver.headerLastName.setText(user.last_name);
-
-                    Picasso.with(getActivity()).load(user.photo_200).
-                            transform(new CircleTransform()).into(Driver.image);
-
-                    Driver.image.setVisibility(View.VISIBLE);
-
-                    if(!userDb.isRowExists(user.id)){
-                        UserDb.user_id = user.id;
-                        userDb.write();
-
-                        Tables.setTableMain("user" + "_" + user.id);
-
-                        mainDbForUser.createTable(Tables.getTableMain());
-                        mainDbForUser.insert(Tables.getTableMain());
-
-                        if (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
-
-                            for (int i = 0; i < 10; i++) {
-
-                                int result = mainDbForUser.getNumber(i, Tables.getTableMain());
-
-                                mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
-                            }
-                        }
-                        Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
-                    }else {
-
-                        Tables.setTableMain("user" + "_" + user.id);
-                        Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
-                    }
-                }
-            });
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            //linlaHeaderProgress.setVisibility(View.GONE);
-            utils.transactions(getFragmentManager(), new LessonTenWordFragment());
-
-        }
-    }
-
-    /*****************************************************************************************/
-    private class VkErrorResponse extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //linlaHeaderProgress.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            Tables.setTableMain("defaultuser");
-
-            if(!mainDbForUser.isExists(Tables.getTableMain())) {
-
-                mainDbForUser.createTable(Tables.getTableMain());
-                mainDbForUser.insert(Tables.getTableMain());
-
-                if (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
-
-                    for (int i = 0; i < 10; i++) {
-
-                        int result = mainDbForUser.getNumber(i, Tables.getTableMain());
-
-                        mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
-                    }
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
-
-            //linlaHeaderProgress.setVisibility(View.GONE);
-        }
     }
 
     /*******************************************************************************************/
@@ -470,40 +332,8 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                 break;
         }
     }
-    /*****************************************************************************************/
-    private class GetData extends AsyncTask<Void, Void, Void>{
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            for (int j = 0; j < mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).size(); j++) {
-
-                int index = mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).get(j);
-                mainDbForUser.update(Tables.getTableMain(), MainDbForUser.LEARNED, index);
-                Log.e("getIdForeignWord", String.valueOf(mainDb.getIdForeginWord(mainDb.getWord(index, 2))));
-            }
-
-            Log.e("getCountLessonWords", String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
-
-            mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.TEN);
-
-            int i = 0;
-
-            while (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
-
-                int index = mainDbForUser.getNumber(i, Tables.getTableMain());
-                mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(index, 2)));
-
-                i++;
-                Log.e("iiiiiiiiiiii", String.valueOf(i));
-            }
-            return null;
-        }
-
-    }
-
     /******************************************************************************************/
-    private void showDialog() {
+    void showDialog() {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_alert);
@@ -526,7 +356,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                 }*/
 
                 try {
-                    new GetData().execute().get();
+                    new GetDataFromDb().execute().get();
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
@@ -550,61 +380,6 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
             }
         });
         dialog.show();
-    }
-
-    /******************************************************************************/
-    private void VkLogoutLogin() {
-        Driver.imageViewVk.setVisibility(View.VISIBLE);
-        Driver.imageViewVk.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(VKSdk.isLoggedIn()){
-
-                    final Dialog dialog = new Dialog(getActivity());
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.setContentView(R.layout.logaut_alert);
-
-                    TextView text = (TextView) dialog.findViewById(R.id.textAlertDialog);
-                    Button logoutBtn = (Button) dialog.findViewById(R.id.logoutButton);
-                    Button dontlogoutBtn = (Button) dialog.findViewById(R.id.dontLogout);
-
-                    Typeface type2 = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFONT);
-
-                    text.setTypeface(type2);
-                    logoutBtn.setTypeface(type2);
-                    dontlogoutBtn.setTypeface(type2);
-
-                    logoutBtn.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            VKSdk.logout();
-                            Driver.headerName.setText(null);
-                            Driver.headerLastName.setText(null);
-                            Driver.image.setVisibility(View.INVISIBLE);
-                            try {
-                                new VkErrorResponse().execute().get();
-                            } catch (InterruptedException | ExecutionException e) {
-                                e.printStackTrace();
-                            }
-                            utils.transactions(getFragmentManager(), new LessonTenWordFragment());
-                            dialog.cancel();
-                        }
-                    });
-
-                    dontlogoutBtn.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    dialog.show();
-
-                }else{
-                    VKSdk.login(LessonTenWordFragment.this, scope);
-                }
-            }
-        });
     }
 
 }

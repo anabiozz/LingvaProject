@@ -4,8 +4,7 @@
     package="com.almexe.lingvaproject" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>-->
 
     <application
         android:allowBackup="true"
@@ -24,6 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.vk.sdk.VKServiceActivity"
+            android:label="ServiceActivity"
+            android:theme="@style/VK.Transparent" />
         <meta-data
             android:name="ispeech_api_key"
             android:value="024741213c2ea3565859bfc757f1e6b5" />

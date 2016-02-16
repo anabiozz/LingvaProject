@@ -18,10 +18,10 @@
         android:id="@+id/navigation_item_4"
         android:icon="@drawable/books19"
         android:title="@string/navigation_item_4" />
-    <!--<item
+    <item
         android:id="@+id/navigation_item_5"
         android:icon="@drawable/gears6"
-        android:title="@string/navigation_item_5" />-->
+        android:title="@string/navigation_item_5" />
 
     <!--The drawer itesm below have been classified into groups-->
 
