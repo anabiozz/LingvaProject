@@ -44,7 +44,7 @@ public class WrongResultCheckFragment extends Fragment implements View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final View v = inflater.inflate(R.layout.fragment_result_check, container,false);
+        View v = inflater.inflate(R.layout.fragment_result_check, container,false);
 
         utils = new Utils();
         mainDb = new MainDb(getActivity());
@@ -91,7 +91,7 @@ public class WrongResultCheckFragment extends Fragment implements View.OnClickLi
 
         font();
 
-        Driver.imageViewVk.setVisibility(View.INVISIBLE);
+        //Driver.getImageViewVk().setVisibility(View.INVISIBLE);
 
         resultButton.setOnClickListener(this);
 

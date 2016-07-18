@@ -3,23 +3,44 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@drawable/materialportret">
 
     <LinearLayout
         android:id="@+id/activity"
         android:layout_width="match_parent"
         android:orientation="vertical"
+        android:gravity="center"
         android:fitsSystemWindows="true"
         android:layout_height="match_parent">
 
         <include layout="@layout/toolbar"/>
 
-    <FrameLayout
-        android:id="@+id/content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        <FrameLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/header_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible" >
+
+        <ProgressBar
+            android:indeterminate="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/marker_progress"
+            style="?android:attr/progressBarStyle"
+            android:layout_gravity="center_vertical|center_horizontal"/>
     </LinearLayout>
+
+
 
 
     <android.support.design.widget.NavigationView

@@ -1,5 +1,6 @@
 package com.almexe.lingvaproject;
 
+import android.content.Context;
 import android.content.Intent;
 
 import com.almexe.lingvaproject.pages.AbstractFragment;
@@ -26,5 +27,15 @@ public class Application extends android.app.Application{
         super.onCreate();
         vkAccessTokenTracker.startTracking();
         VKSdk.initialize(this);
+    }
+
+    private static Application instance;
+
+    public Application() {
+        instance = this;
+    }
+
+    public static Context getContext() {
+        return instance;
     }
 }

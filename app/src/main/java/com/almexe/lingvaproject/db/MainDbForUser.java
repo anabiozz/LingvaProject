@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import com.almexe.lingvaproject.Application;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -15,10 +17,19 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class MainDbForUser{
 
+    private static final String TAG = "MainDbForUser";
     private Context  mContext;
     private DbHelper  dbHelper;
     public SQLiteDatabase mDb;
     public static String   data;
+
+    private static MainDbForUser sMainDbForUser = null;
+    public static MainDbForUser getInstance() {
+        if (sMainDbForUser == null) {
+            sMainDbForUser = new MainDbForUser(Application.getContext());
+        }
+        return sMainDbForUser;
+    }
 
     public static final String ID =            "_id";
     public static final String FOREGIN_WORD = "foregin_words";
@@ -48,10 +59,6 @@ public class MainDbForUser{
     public static List<String> notSortedListForForeign10Words = new ArrayList<>();
     public static List<String> notSortedListForNativ10Words = new ArrayList<>();
     public static List<String> trans10Array = new ArrayList<>();
-
-    private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
-    private final Lock r = rwl.readLock();
-    private final Lock w = rwl.writeLock();
 
     private class DbHelper extends SQLiteOpenHelper {
 
@@ -119,19 +126,6 @@ public class MainDbForUser{
                 ""+LEARNED+" INTEGER" +
                 ")");
     }
-
-    /*public void createTable(String table){
-        this.table = table;
-        dbHelper = new DbHelper(mContext);
-        mDb = dbHelper.getReadableDatabase();
-        mDb.execSQL("BEGIN;");
-        mDb.execSQL("CREATE TABLE "+table+" (" +
-                ""+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ""+FOREGIN_WORD+" VARCHAR(200), " +
-                ""+NATIV_WORD+" VARCHAR(200), " +
-                ""+TRANSCRIPTION+" VARCHAR(200)" +
-                ")");
-    }*/
 
     public void createTableOwnWords(String table){
         mDb.execSQL("CREATE TABLE "+table+" (" +
@@ -208,7 +202,7 @@ public class MainDbForUser{
         mDb.execSQL("UPDATE "+table+" SET "+column+" = '0' WHERE "+column+" = '1'");
     }
 
-    public void deleteOne(String table, String column){
+    public void deleteFromTableWhereColumnEqualsOne(String table, String column){
         dbHelper  = new DbHelper(mContext);
         mDb = dbHelper.getReadableDatabase();
         mDb.execSQL("DELETE FROM "+table+" WHERE "+column+" = '1'");
@@ -252,7 +246,7 @@ public class MainDbForUser{
         return result;
     }
 
-    public int getNumber(int position, String table){
+    public int getNotLearnedWords(int position, String table){
         String selectQuery = "SELECT * FROM " + table + " WHERE " + LEARNED + " = '0' ORDER BY RANDOM()";
         dbHelper  = new DbHelper(mContext);
         mDb = dbHelper.getReadableDatabase();
@@ -306,7 +300,7 @@ public class MainDbForUser{
         dbHelper = new DbHelper(mContext);
         mDb = dbHelper.getReadableDatabase();
         ArrayList<Integer> list = new ArrayList<>();
-        Cursor cursor = mDb.rawQuery(selectQuery, null);
+        cursor = mDb.rawQuery(selectQuery, null);
         if(cursor.moveToFirst()) {
             do{
                 list.add(cursor.getInt(0));
@@ -478,7 +472,7 @@ public class MainDbForUser{
         cursor = mDb.rawQuery(selectQuery, null);
         cursor.moveToPosition(icount);
         result = cursor.isLast();
-        Log.i("in method isLast = ", String.valueOf(cursor.isLast()));
+        Log.i(TAG, "isLast" + String.valueOf(cursor.isLast()));
         return result;
     }
 

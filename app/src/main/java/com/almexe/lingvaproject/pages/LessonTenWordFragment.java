@@ -5,11 +5,9 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.media.AudioManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -26,38 +24,24 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.almexe.lingvaproject.Driver;
 import com.almexe.lingvaproject.R;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
-import com.almexe.lingvaproject.db.UserDb;
-import com.almexe.lingvaproject.utils.CircleTransform;
 import com.almexe.lingvaproject.utils.Constants;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
-import com.squareup.picasso.Picasso;
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKCallback;
-import com.vk.sdk.VKScope;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKParameters;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKApiUser;
-import com.vk.sdk.api.model.VKList;
+import com.almexe.lingvaproject.utils.VkErrorResponse;
 
 import org.ispeech.SpeechSynthesis;
 import org.ispeech.error.BusyException;
 import org.ispeech.error.InvalidApiKeyException;
 import org.ispeech.error.NoNetworkException;
 
-import java.util.concurrent.ExecutionException;
+import java.util.ArrayList;
 
-public class LessonTenWordFragment extends AbstractFragment implements OnClickListener {
+public class LessonTenWordFragment extends Fragment implements OnClickListener {
 
+    private static final String TAG = "LessonTenWordFragment";
     ImageButton  addForLearning;
     public static TextView mainDataTextView;
     private TextView translate;
@@ -81,11 +65,9 @@ public class LessonTenWordFragment extends AbstractFragment implements OnClickLi
         super.onCreate(savedInstanceState);
 
         utils = new Utils();
+        mainDbForUser = MainDbForUser.getInstance();
+        mainDb = MainDb.getInstance();
 
-        /*init db`s*/
-        mainDbForUser = new MainDbForUser(getActivity());
-        mainDb = new MainDb(getActivity());
-        userDb = new UserDb(getActivity());
         /***************************************************/
         /*method change lesson words*/
         toChangeWords();
@@ -95,7 +77,7 @@ public class LessonTenWordFragment extends AbstractFragment implements OnClickLi
         synthesis.setStreamType(AudioManager.STREAM_MUSIC);
         /***************************************************/
         /*Login/Logout Button*/
-        Vkloginlogout();
+        //Vkloginlogout();
     }
 
     /*******************************************************************************************/
@@ -354,14 +336,24 @@ public class LessonTenWordFragment extends AbstractFragment implements OnClickLi
                 /*if(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED) == 10){
                     utils.wallPost(getActivity(), "Ура вы изучили 10 слов");
                 }*/
+                Log.d(TAG, String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN)));
 
-                try {
-                    new GetDataFromDb().execute().get();
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
+
+                mainDbForUser = MainDbForUser.getInstance();
+
+               /* while (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN)) {
+                    mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(wordsFromTextView));
+                }*/
+                mainDbForUser.insertLearned(Tables.getTableMain());
+                mainDbForUser.deleteFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN);
+                if (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
+                    for (int i = 0; i < 10; i++) {
+                        int result = mainDbForUser.getNotLearnedWords(i, Tables.getTableMain());
+                        mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
+                    }
                 }
 
-                Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
+                //Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit);

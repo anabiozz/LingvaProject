@@ -71,7 +71,7 @@ public class AddOwnWordsFragment extends AbstractFragment implements OnClickList
 		mainDbForUser = new MainDbForUser(getActivity());
 		mainDb = new MainDb(getActivity());
 		utils = new Utils();
-		userDb = new UserDb(getActivity());
+	//	userDb = new UserDb(getActivity());
 
 		mainDb.read();
 
@@ -89,7 +89,7 @@ public class AddOwnWordsFragment extends AbstractFragment implements OnClickList
 
 		font();
 
-		Vkloginlogout();
+	//	Vkloginlogout();
 
 		return v;
 	}

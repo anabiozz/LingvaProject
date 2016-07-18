@@ -107,7 +107,7 @@ public class CheckFragment extends Fragment implements OnClickListener{
 
         font();
 
-        Driver.imageViewVk.setVisibility(View.INVISIBLE);
+        //Driver.imageViewVk.setVisibility(View.INVISIBLE);
 
         return v;
     }

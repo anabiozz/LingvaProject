@@ -7,6 +7,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.almexe.lingvaproject.Application;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,7 +19,7 @@ import java.util.List;
 
 public class MainDb extends SQLiteOpenHelper{
 
-    private static String DB_PATH = "/data/data/ru.lingva/databases/";
+    private static String DB_PATH =  "/data/data/ru.lingva/databases/";
     private static String DB_NAME = "MainDb";
     private SQLiteDatabase myDataBase;
     private final Context mContext;
@@ -40,7 +42,14 @@ public class MainDb extends SQLiteOpenHelper{
 	public List<String> transArray = new ArrayList<>();
 	
 	public String foreginWord, nativWord;
-	
+
+	private static MainDb sMainDb = null;
+	public static MainDb getInstance() {
+		if (sMainDb == null) {
+			sMainDb = new MainDb(Application.getContext());
+		}
+		return sMainDb;
+	}
 
 	public MainDb(Context context) {
     	super(context, DB_NAME, null, 1);

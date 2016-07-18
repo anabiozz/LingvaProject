@@ -70,10 +70,10 @@ public class OwnLessonFragment extends AbstractFragment implements OnClickListen
 
 		prepareTTSEngine();
 		synthesis.setStreamType(AudioManager.STREAM_MUSIC);
-		mainDbForUser = new MainDbForUser(getActivity());
+		mainDbForUser = MainDbForUser.getInstance();
 		utils = new Utils();
-		mainDb = new MainDb(getActivity());
-		userDb = new UserDb(getActivity());
+		mainDb = MainDb.getInstance();
+	//	userDb = new UserDb(getActivity());
 	}
 
 
@@ -119,7 +119,7 @@ public class OwnLessonFragment extends AbstractFragment implements OnClickListen
 		mainDataTextView.setOnClickListener(this);
 
 		/*Login/Logout Button*/
-		Vkloginlogout();
+	//	Vkloginlogout();
 
 		return v;
 	}

@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.almexe.lingvaproject" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.almexe.lingvaproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>-->
 
+    <!-- <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> -->
     <application
-        android:allowBackup="true"
+        android:name=".Application"
         android:icon="@drawable/font_color"
         android:label="@string/app_name"
-        android:name=".Application"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".Driver"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,9 +25,32 @@
             android:name="com.vk.sdk.VKServiceActivity"
             android:label="ServiceActivity"
             android:theme="@style/VK.Transparent" />
+        <activity
+            android:name=".utils.VKRegistration"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+
+
         <meta-data
             android:name="ispeech_api_key"
             android:value="024741213c2ea3565859bfc757f1e6b5" />
+
+        <service
+            android:name=".utils.InitialService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+
+        <receiver
+            android:name=".utils.Receiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="ACTION_LOGIN_VK"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
