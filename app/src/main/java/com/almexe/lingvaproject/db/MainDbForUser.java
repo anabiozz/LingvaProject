@@ -23,13 +23,13 @@ public class MainDbForUser{
     public SQLiteDatabase mDb;
     public static String   data;
 
-    private static MainDbForUser sMainDbForUser = null;
+    /*private static MainDbForUser sMainDbForUser = null;
     public static MainDbForUser getInstance() {
         if (sMainDbForUser == null) {
             sMainDbForUser = new MainDbForUser(Application.getContext());
         }
         return sMainDbForUser;
-    }
+    }*/
 
     public static final String ID =            "_id";
     public static final String FOREGIN_WORD = "foregin_words";
@@ -105,7 +105,7 @@ public class MainDbForUser{
 
         cursor.close();
     }
-
+/*
     public void createTableTenWords(String table){
         mDb.execSQL("CREATE TABLE "+table+" (" +
                 ""+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -113,7 +113,7 @@ public class MainDbForUser{
                 ""+NATIV_WORD+" VARCHAR(200), " +
                 ""+TRANSCRIPTION+" VARCHAR(200)" +
                 ")");
-    }
+    }*/
 
     public void createTable(String table){
         this.table = table;
@@ -127,7 +127,7 @@ public class MainDbForUser{
                 ")");
     }
 
-    public void createTableOwnWords(String table){
+   /* public void createTableOwnWords(String table){
         mDb.execSQL("CREATE TABLE "+table+" (" +
                 ""+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 ""+FOREGIN_WORD+" VARCHAR(200), " +
@@ -150,7 +150,7 @@ public class MainDbForUser{
                 ""+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 ""+NUMBERS+" INTEGER" +
                 ")");
-    }
+    }*/
 
     public void insert(String table){
         this.table = table;
@@ -185,8 +185,11 @@ public class MainDbForUser{
     }
 
     public void update(String table, String column, int id){
-        dbHelper  = new DbHelper(mContext);
-        mDb = dbHelper.getReadableDatabase();
+        ContentValues newValues = new ContentValues();
+        newValues.put(LEARNED, 1);
+        dbHelper  = new DbHelper(Application.getContext());
+        mDb = dbHelper.getWritableDatabase();
+        mDb.insert(table, null, newValues);
         mDb.execSQL("UPDATE "+table+" SET "+column+" = '1' WHERE "+ID+" = "+id+"");
     }
 
@@ -196,10 +199,10 @@ public class MainDbForUser{
         mDb.execSQL("UPDATE "+table+" SET "+column+" = '0' WHERE "+ID+" = "+id+"");
     }
 
-    public void updateToNull(String table, String column){
+    public void updateToNull(String table, String column, String column2){
         dbHelper  = new DbHelper(mContext);
         mDb = dbHelper.getReadableDatabase();
-        mDb.execSQL("UPDATE "+table+" SET "+column+" = '0' WHERE "+column+" = '1'");
+        mDb.execSQL("UPDATE "+table+" SET "+column+" = '0' WHERE "+column2+" = '1'");
     }
 
     public void deleteFromTableWhereColumnEqualsOne(String table, String column){
@@ -279,11 +282,11 @@ public class MainDbForUser{
         mDb.close();
     }
 
-    public int getCountLessonWordsFromTen (String table, String column) {
+    public int getCountWordsFromTableWhereColumnEqualsOne (String table, String column) {
         String selectQuery = "SELECT COUNT("+column+") FROM " + table + " WHERE " + column + " = '1' ";
-        dbHelper = new DbHelper(mContext);
+        dbHelper = new DbHelper(Application.getContext());
         mDb = dbHelper.getReadableDatabase();
-        Cursor cursor = mDb.rawQuery(selectQuery, null);
+        cursor = mDb.rawQuery(selectQuery, null);
         int count = 0;
         if(null != cursor)
             if(cursor.getCount() > 0){

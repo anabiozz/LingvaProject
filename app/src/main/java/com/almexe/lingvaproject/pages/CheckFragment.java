@@ -221,7 +221,7 @@ public class CheckFragment extends Fragment implements OnClickListener{
                 e.printStackTrace();
             }
 
-            if(moveThoughtArray != mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN)-1) moveThoughtArray++;
+            if(moveThoughtArray != mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN)-1) moveThoughtArray++;
         }
     }
 

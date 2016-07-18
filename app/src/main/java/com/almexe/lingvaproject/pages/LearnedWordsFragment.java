@@ -43,21 +43,22 @@ import java.util.concurrent.ExecutionException;
 
 public class LearnedWordsFragment extends AbstractFragment{
 
-    //MainDbForUser mainDbForUser;
-    //MainDb mainDb;
+    MainDbForUser mainDbForUser;
+    MainDb mainDb;
+    private UserDb userDb;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.fragment_learned_words, container, false);
 
-        //mainDbForUser = new MainDbForUser(getActivity());
-        //mainDb = new MainDb(getActivity());
+        mainDbForUser = new MainDbForUser(getActivity());
+        mainDb = new MainDb(getActivity());
         //userDb = new UserDb(getActivity());
 
         RecyclerView rv = (RecyclerView)v.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //rv.setAdapter(new WordsListAdapter(createListData(),createNativeListData()));
+        rv.setAdapter(new WordsListAdapter(createListData(),createNativeListData()));
 
         /*Login/Logout Button*/
         //Vkloginlogout();
@@ -65,7 +66,7 @@ public class LearnedWordsFragment extends AbstractFragment{
         return v;
     }
 
-    /*private ArrayList<String> createListData() {
+    private ArrayList<String> createListData() {
         ArrayList<String> data = new ArrayList<>();
         for(int i = 0; i < mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.LEARNED).size(); i++){
            data.add( mainDb.getWordById(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.LEARNED).get(i)));
@@ -79,5 +80,5 @@ public class LearnedWordsFragment extends AbstractFragment{
             data.add( mainDb.getNativeWordById(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.LEARNED).get(i)));
         }
         return data;
-    }*/
+    }
 }

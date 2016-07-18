@@ -8,9 +8,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.media.AudioManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -24,20 +26,23 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.almexe.lingvaproject.Driver;
 import com.almexe.lingvaproject.R;
+import com.almexe.lingvaproject.db.GetDataFromDb;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
 import com.almexe.lingvaproject.utils.Constants;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
 import com.almexe.lingvaproject.utils.VkErrorResponse;
+import com.vk.sdk.VKSdk;
 
 import org.ispeech.SpeechSynthesis;
 import org.ispeech.error.BusyException;
 import org.ispeech.error.InvalidApiKeyException;
 import org.ispeech.error.NoNetworkException;
 
-import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class LessonTenWordFragment extends Fragment implements OnClickListener {
 
@@ -58,6 +63,8 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     private MainDbForUser mainDbForUser;
     MainDb mainDb;
     static int wordCount = 0;
+    private TextView headerLastName;
+    private Integer id;
 
 
     @Override
@@ -65,8 +72,8 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         super.onCreate(savedInstanceState);
 
         utils = new Utils();
-        mainDbForUser = MainDbForUser.getInstance();
-        mainDb = MainDb.getInstance();
+        mainDbForUser = new MainDbForUser(getActivity());
+        mainDb = new MainDb(getActivity());
 
         /***************************************************/
         /*method change lesson words*/
@@ -86,6 +93,11 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_lesson_ten_word, container, false);
+
+        View view = View.inflate(Driver.getContext(), R.layout.activity_main, null);
+        NavigationView navigationView = (NavigationView)view.findViewById(R.id.navigation);
+        View headerView = navigationView.inflateHeaderView(R.layout.drawer_header);
+        headerLastName = (TextView) headerView.findViewById(R.id.headerLastName);
 
         //tintManager.setStatusBarTintColor(getResources().getColor(R.color.colorPrimaryDark));
 
@@ -112,7 +124,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                 MainDbForUser.TEN).get(0)));
         translate.setText(mainDb.getTranslateById(mainDbForUser.getListId(Tables.getTableMain(),
                 MainDbForUser.TEN).get(0)));
-        countWord.setText(count + "/" + mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN));
+        countWord.setText(count + "/" + mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN));
 
         Log.e("getListId", String.valueOf(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN)));
 
@@ -192,7 +204,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
 
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
-                    if(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 0){
+                    if(mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN) != 0){
                         if(mainDataTextView.getText().equals(mainDb.readNowNative(mainDbForUser.getListId(Tables.getTableMain(),
                                 MainDbForUser.TEN).get(wordCount)))){
 
@@ -212,12 +224,12 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                                        float velocityY) {
                     if (e1.getX() > e2.getX()) {
                         ++wordCount;
-                        if(wordCount != mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN)){
+                        if(wordCount != mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN)){
                             mainDataTextView.setText(mainDb.readNextForegin(mainDbForUser.getListId(Tables.getTableMain(),
                                     MainDbForUser.TEN).get(wordCount)));
                             translate.setText(mainDb.readNowTrans(mainDbForUser.getListId(Tables.getTableMain(),
                                     MainDbForUser.TEN).get(wordCount)));
-                            countWord.setText(++count + "/" + mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN));
+                            countWord.setText(++count + "/" + mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN));
 
                         }else{
                             wordCount = 0;
@@ -226,7 +238,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                                     MainDbForUser.TEN).get(wordCount)));
                             translate.setText(mainDb.readNowTrans(mainDbForUser.getListId(Tables.getTableMain(),
                                     MainDbForUser.TEN).get(wordCount)));
-                            countWord.setText(++count + "/" + mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN));
+                            countWord.setText(++count + "/" + mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN));
                         }
                     }
 
@@ -238,15 +250,15 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                                     MainDbForUser.TEN).get(wordCount)));
                             translate.setText(mainDb.readNowTrans(mainDbForUser.getListId(Tables.getTableMain(),
                                     MainDbForUser.TEN).get(wordCount)));
-                            countWord.setText(--count + "/" + mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN));
+                            countWord.setText(--count + "/" + mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN));
                         }else{
-                            wordCount = mainDbForUser.getListId(Tables.getTableMain(), mainDbForUser.TEN).size()-1; //9
-                            count = mainDbForUser.getListId(Tables.getTableMain(), mainDbForUser.TEN).size()+1;     //11
+                            wordCount = mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).size()-1; //9
+                            count = mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).size()+1;     //11
                             mainDataTextView.setText(mainDb.readPreviousForegin(mainDbForUser.getListId(Tables.getTableMain(),
                                     MainDbForUser.TEN).get(wordCount)));
                             translate.setText(mainDb.readNowTrans(mainDbForUser.getListId(Tables.getTableMain(),
                                     MainDbForUser.TEN).get(wordCount)));
-                            countWord.setText(--count + "/" + mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN));
+                            countWord.setText(--count + "/" + mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN));
                         }
 
                     }
@@ -276,6 +288,38 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         if(fSize > 30) fSize = 30;
 
         mainDataTextView.setTextSize(fSize);
+    }
+
+
+    class ChangeWords extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            for(int i = 0; i < 10; i++) {
+                mainDbForUser.update(Tables.getTableMain(), MainDbForUser.LEARNED, mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).get(i));
+            }
+            mainDbForUser.deleteFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN);
+            while (mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN) < 10) {
+                for (int i = 0; i < 10; i++) {
+                    int result = mainDbForUser.getNotLearnedWords(i, Tables.getTableMain());
+                    mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            headerLastName.setText(String.valueOf(mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED)));
+
+            mainDbForUser = new MainDbForUser(getActivity());
+            Log.d(TAG, String.valueOf(mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED)));
+
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+            fragmentTransaction.replace(R.id.content_frame, new LessonTenWordFragment()).commit();
+        }
     }
 
     /*******************************************************************************************/
@@ -336,29 +380,13 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                 /*if(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED) == 10){
                     utils.wallPost(getActivity(), "Ура вы изучили 10 слов");
                 }*/
-                Log.d(TAG, String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN)));
-
-
-                mainDbForUser = MainDbForUser.getInstance();
-
-               /* while (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN)) {
-                    mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(wordsFromTextView));
-                }*/
-                mainDbForUser.insertLearned(Tables.getTableMain());
-                mainDbForUser.deleteFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN);
-                if (mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
-                    for (int i = 0; i < 10; i++) {
-                        int result = mainDbForUser.getNotLearnedWords(i, Tables.getTableMain());
-                        mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
-                    }
+                try {
+                    new ChangeWords().execute().get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
                 }
-
-                //Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
-
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-                fragmentTransaction.replace(R.id.content_frame, new LessonTenWordFragment()).commit();
-
                 dialog.cancel();
             }
         });
@@ -367,7 +395,6 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
 
             @Override
             public void onClick(View v) {
-
                 dialog.cancel();
             }
         });

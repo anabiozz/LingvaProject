@@ -43,13 +43,13 @@ public class MainDb extends SQLiteOpenHelper{
 	
 	public String foreginWord, nativWord;
 
-	private static MainDb sMainDb = null;
+	/*private static MainDb sMainDb = null;
 	public static MainDb getInstance() {
 		if (sMainDb == null) {
 			sMainDb = new MainDb(Application.getContext());
 		}
 		return sMainDb;
-	}
+	}*/
 
 	public MainDb(Context context) {
     	super(context, DB_NAME, null, 1);

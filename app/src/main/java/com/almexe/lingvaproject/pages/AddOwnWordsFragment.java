@@ -128,7 +128,7 @@ public class AddOwnWordsFragment extends AbstractFragment implements OnClickList
 	public void onClick(View v) {
 		switch(v.getId()) {
 			case R.id.proseedToLesson:
-				if(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.OWN) != 0) {
+				if(mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.OWN) != 0) {
 					utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_3));
 					utils.transactions(getFragmentManager(), new OwnLessonFragment());
 

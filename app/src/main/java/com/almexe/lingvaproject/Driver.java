@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.almexe.lingvaproject.db.MainDbForUser;
 import com.almexe.lingvaproject.pages.AddOwnWordsFragment;
 import com.almexe.lingvaproject.pages.LearnedWordsFragment;
 import com.almexe.lingvaproject.pages.LessonTenWordFragment;
@@ -31,6 +32,7 @@ import com.almexe.lingvaproject.pages.Settings;
 import com.almexe.lingvaproject.utils.Constants;
 import com.almexe.lingvaproject.utils.CustomTypefaceSpan;
 import com.almexe.lingvaproject.utils.InitialService;
+import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -38,6 +40,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
 
     private static final long DRAWER_CLOSE_DELAY_MS = 250;
     private static final String NAV_ITEM_ID = "navItemId";
+    private static final String TAG = "Driver";
 
     private final Handler mDrawerActionHandler = new Handler();
     private DrawerLayout mDrawerLayout;
@@ -118,6 +121,13 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         learnedWords.setTypeface(mainFont);
         numberAllWords.setTypeface(mainFont);
         numberlLearnedWords.setTypeface(mainFont);
+        if(Tables.getTableMain() != null) {
+            //numberlLearnedWords.setText(String.valueOf(MainDbForUser.getInstance().getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED)));
+        }else {
+            numberlLearnedWords.setText(String.valueOf(0));
+        }
+
+
         imageViewVk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,12 +145,14 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
     protected void onResume() {
         super.onResume();
         startService(new Intent(this, InitialService.class));
+        Log.d(TAG, "onResume");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        stopService(new Intent(this, InitialService.class));
+        //stopService(new Intent(this, InitialService.class));
+        Log.d(TAG, "onStop");
     }
 
     public void fontMenu(){
