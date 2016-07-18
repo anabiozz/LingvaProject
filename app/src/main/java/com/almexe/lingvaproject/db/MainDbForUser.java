@@ -23,13 +23,13 @@ public class MainDbForUser{
     public SQLiteDatabase mDb;
     public static String   data;
 
-    /*private static MainDbForUser sMainDbForUser = null;
+    private static MainDbForUser sMainDbForUser = null;
     public static MainDbForUser getInstance() {
         if (sMainDbForUser == null) {
             sMainDbForUser = new MainDbForUser(Application.getContext());
         }
         return sMainDbForUser;
-    }*/
+    }
 
     public static final String ID =            "_id";
     public static final String FOREGIN_WORD = "foregin_words";
@@ -191,6 +191,8 @@ public class MainDbForUser{
         mDb = dbHelper.getWritableDatabase();
         mDb.insert(table, null, newValues);
         mDb.execSQL("UPDATE "+table+" SET "+column+" = '1' WHERE "+ID+" = "+id+"");
+
+
     }
 
     public void updateToNull(String table, String column, int id){

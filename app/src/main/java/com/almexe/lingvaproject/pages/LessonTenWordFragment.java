@@ -63,7 +63,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     private MainDbForUser mainDbForUser;
     MainDb mainDb;
     static int wordCount = 0;
-    private TextView headerLastName;
+
     private Integer id;
 
 
@@ -94,10 +94,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
 
         View v = inflater.inflate(R.layout.fragment_lesson_ten_word, container, false);
 
-        View view = View.inflate(Driver.getContext(), R.layout.activity_main, null);
-        NavigationView navigationView = (NavigationView)view.findViewById(R.id.navigation);
-        View headerView = navigationView.inflateHeaderView(R.layout.drawer_header);
-        headerLastName = (TextView) headerView.findViewById(R.id.headerLastName);
+        Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED)));
 
         //tintManager.setStatusBarTintColor(getResources().getColor(R.color.colorPrimaryDark));
 
@@ -311,7 +308,6 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            headerLastName.setText(String.valueOf(mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED)));
 
             mainDbForUser = new MainDbForUser(getActivity());
             Log.d(TAG, String.valueOf(mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED)));
@@ -319,6 +315,8 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit);
             fragmentTransaction.replace(R.id.content_frame, new LessonTenWordFragment()).commit();
+
+
         }
     }
 

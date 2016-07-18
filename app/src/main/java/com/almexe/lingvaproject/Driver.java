@@ -51,6 +51,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
     Utils utils;
 
     protected static Context context;
+    public static TextView numberlLearnedWords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +114,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         TextView allWords = (TextView)headerView.findViewById(R.id.allWords);
         TextView numberAllWords = (TextView)headerView.findViewById(R.id.numberAllWords);
         TextView learnedWords = (TextView)headerView.findViewById(R.id.learnedWords);
-        TextView numberlLearnedWords = (TextView) headerView.findViewById(R.id.numberlLearnedWords);
+        numberlLearnedWords = (TextView) headerView.findViewById(R.id.numberlLearnedWords);
 
         numberAllWords.setText(String.valueOf(Constants.NUMBERWORD));
 
@@ -121,11 +122,6 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         learnedWords.setTypeface(mainFont);
         numberAllWords.setTypeface(mainFont);
         numberlLearnedWords.setTypeface(mainFont);
-        if(Tables.getTableMain() != null) {
-            //numberlLearnedWords.setText(String.valueOf(MainDbForUser.getInstance().getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED)));
-        }else {
-            numberlLearnedWords.setText(String.valueOf(0));
-        }
 
 
         imageViewVk.setOnClickListener(new View.OnClickListener() {
