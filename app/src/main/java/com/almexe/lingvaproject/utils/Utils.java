@@ -36,12 +36,20 @@ import com.vk.sdk.api.model.VKPhotoArray;
 import com.vk.sdk.api.photo.VKImageParameters;
 import com.vk.sdk.api.photo.VKUploadImage;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class Utils extends Fragment{
 
     public static final String MyPREFERENCES = "MyPrefs" ;
-    SharedPreferences sharedpreferences;
+    public static final String ADD_OWN_WORDS_FRAGMENT = "ADD_OWN_WORDS_FRAGMENT" ;
+    public static final String CHECK_FRAGMENT = "CHECK_FRAGMENT" ;
+    public static final String LEARNED_WORDS_FRAGMENT = "LEARNED_WORDS_FRAGMENT" ;
+    public static final String LESSON_TEN_WORDS_FRAGMENT = "LESSON_TEN_WORDS_FRAGMENT" ;
+    public static final String OWN_LESSON_FRAGMENT = "OWN_LESSON_FRAGMENT" ;
+    public static final String WRONG_RESULT_FRAGMENT = "WRONG_RESULT_FRAGMENT" ;
+    public static final String SETTINGS_FRAGMENT = "SETTINGS_FRAGMENT" ;
+    public static final String START_FRAGMENT = "START_FRAGMENT" ;
 
     public void myToast(Context context, LayoutInflater inflater, View v,
                         String message, int toastLength){
@@ -67,10 +75,10 @@ public class Utils extends Fragment{
         ((Driver)a).setTitle(mNewTitle);
     }
 
-    public void transactions(FragmentManager fragmentManager, Fragment fragment){
+    public void transactions(FragmentManager fragmentManager, Fragment fragment, String tag){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-        fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+        fragmentTransaction.replace(R.id.content_frame, fragment, tag).commit();
     }
 
     public void wallPost(Activity a, final String message){
@@ -108,17 +116,5 @@ public class Utils extends Fragment{
             public void onError(VKError error) {
             }
         });
-    }
-
-    public void setPreference(Context c, boolean value, String key) {
-        sharedpreferences = c.getSharedPreferences(MyPREFERENCES, 0);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putBoolean(key, value);
-        editor.apply();
-    }
-
-    public boolean getPreference(Context c, String key) {
-        sharedpreferences = c.getSharedPreferences(MyPREFERENCES, 0);
-        return sharedpreferences.getBoolean(key, true);
     }
 }

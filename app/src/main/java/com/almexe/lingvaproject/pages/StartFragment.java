@@ -1,11 +1,14 @@
 package com.almexe.lingvaproject.pages;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.almexe.lingvaproject.R;
+import com.almexe.lingvaproject.utils.InitialService;
 import com.almexe.lingvaproject.utils.Utils;
 import com.almexe.lingvaproject.utils.VKRegistration;
 import com.vk.sdk.VKScope;
@@ -17,7 +20,6 @@ public class StartFragment extends AppCompatActivity {
     protected Context context;
     protected VKRegistration registration;
     protected static StartFragment sStartFragment = null;
-    private ProgressBar progressBar;
 
     public StartFragment(){}
 
@@ -25,7 +27,7 @@ public class StartFragment extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_start);
-        progressBar = (ProgressBar)findViewById(R.id.marker_progress);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.marker_progress);
     }
 
     /*@Override
@@ -48,18 +50,6 @@ public class StartFragment extends AppCompatActivity {
 
         return v;
     }*/
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
 
     /*void showDialog() {
         final Dialog dialog = new Dialog(getActivity());

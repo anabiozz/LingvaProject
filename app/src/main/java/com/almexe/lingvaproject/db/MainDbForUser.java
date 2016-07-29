@@ -2,6 +2,7 @@ package com.almexe.lingvaproject.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -9,6 +10,8 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.almexe.lingvaproject.Application;
+import com.almexe.lingvaproject.R;
+import com.almexe.lingvaproject.utils.Tables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +56,6 @@ public class MainDbForUser{
     public String          foreginWord, nativWord, transcription;
 
     public List<String> notSortedListForForeignWords = new ArrayList<>();
-    public List<String> notSortedListForNativWords = new ArrayList<>();
-    public List<String> transArray = new ArrayList<>();
 
     public static List<String> notSortedListForForeign10Words = new ArrayList<>();
     public static List<String> notSortedListForNativ10Words = new ArrayList<>();
@@ -82,7 +83,7 @@ public class MainDbForUser{
         mContext = context;
     }
 
-    public void copy(){
+    /*public void copy(){
         String selectQuery2 = "SELECT * FROM words WHERE _id BETWEEN 0 AND 2000";
         MainDb mainDb = new MainDb(mContext);
         mDb = mainDb.getReadableDatabase();
@@ -104,15 +105,6 @@ public class MainDbForUser{
         }
 
         cursor.close();
-    }
-/*
-    public void createTableTenWords(String table){
-        mDb.execSQL("CREATE TABLE "+table+" (" +
-                ""+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ""+FOREGIN_WORD+" VARCHAR(200), " +
-                ""+NATIV_WORD+" VARCHAR(200), " +
-                ""+TRANSCRIPTION+" VARCHAR(200)" +
-                ")");
     }*/
 
     public void createTable(String table){
@@ -127,31 +119,6 @@ public class MainDbForUser{
                 ")");
     }
 
-   /* public void createTableOwnWords(String table){
-        mDb.execSQL("CREATE TABLE "+table+" (" +
-                ""+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ""+FOREGIN_WORD+" VARCHAR(200), " +
-                ""+NATIV_WORD+" VARCHAR(200), " +
-                ""+TRANSCRIPTION+" VARCHAR(200)" +
-                ")");
-    }
-
-    public void createTableLearnedWords(String table){
-        mDb.execSQL("CREATE TABLE "+table+" (" +
-                ""+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ""+FOREGIN_WORD+" VARCHAR(200), " +
-                ""+NATIV_WORD+" VARCHAR(200), " +
-                ""+TRANSCRIPTION+" VARCHAR(200)" +
-                ")");
-    }
-
-    public void createTableForNumbers(String table){
-        mDb.execSQL("CREATE TABLE "+table+" (" +
-                ""+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ""+NUMBERS+" INTEGER" +
-                ")");
-    }*/
-
     public void insert(String table){
         this.table = table;
         dbHelper = new DbHelper(mContext);
@@ -162,22 +129,7 @@ public class MainDbForUser{
         for(int i = 1; i < 2001; i++){
             statement.clearBindings();
             statement.bindLong(1, i);
-            statement.bindLong(4, 0);
-            statement.execute();
-        }
-        mDb.setTransactionSuccessful();
-        mDb.endTransaction();
-    }
-
-    public void insertLearned(String table){
-        dbHelper = new DbHelper(mContext);
-        mDb = dbHelper.getWritableDatabase();
-        String sql = "INSERT INTO "+ table +" VALUES (?,?,?,?);";
-        SQLiteStatement statement = mDb.compileStatement(sql);
-        mDb.beginTransaction();
-        for(int i = 1; i < 2001; i++){
-            statement.clearBindings();
-            statement.bindNull(2);
+            statement.bindNull(4);
             statement.execute();
         }
         mDb.setTransactionSuccessful();
@@ -185,13 +137,27 @@ public class MainDbForUser{
     }
 
     public void update(String table, String column, int id){
-        ContentValues newValues = new ContentValues();
-        newValues.put(LEARNED, 1);
-        dbHelper  = new DbHelper(Application.getContext());
-        mDb = dbHelper.getWritableDatabase();
-        mDb.insert(table, null, newValues);
-        mDb.execSQL("UPDATE "+table+" SET "+column+" = '1' WHERE "+ID+" = "+id+"");
+            dbHelper  = new DbHelper(mContext);
+            mDb = dbHelper.getWritableDatabase();
+            String result = "'" +id + "'";
+            String update = "UPDATE "+table+" SET "+column+"=1 WHERE "+ID+"="+result+"";
+            mDb.execSQL(update);
 
+    }
+
+    public void updateLearned(String table, String column, int id){
+            dbHelper  = new DbHelper(mContext);
+            mDb = dbHelper.getWritableDatabase();
+            String cmd = "UPDATE '"+table+"' SET 'learned_table'=1 WHERE _id="+id+"";
+            //String insertQuery = String.format("UPDATE '%s' SET '%s'=1 WHERE _id=?", table, column, ID, id);
+            mDb.beginTransaction();
+                if (cmd.trim().length() > 0) {
+                    mDb.execSQL(cmd.trim().intern());
+                    Log.e(TAG, cmd);
+                }
+            mDb.setTransactionSuccessful();
+            mDb.endTransaction();
+            mDb.close();
 
     }
 
@@ -205,6 +171,12 @@ public class MainDbForUser{
         dbHelper  = new DbHelper(mContext);
         mDb = dbHelper.getReadableDatabase();
         mDb.execSQL("UPDATE "+table+" SET "+column+" = '0' WHERE "+column2+" = '1'");
+    }
+
+    public void updateToOne(String table, String column, String column2){
+        dbHelper  = new DbHelper(mContext);
+        mDb = dbHelper.getReadableDatabase();
+        mDb.execSQL("UPDATE "+table+" SET "+column+" = '1' WHERE "+column2+" = '1'");
     }
 
     public void deleteFromTableWhereColumnEqualsOne(String table, String column){
@@ -224,20 +196,6 @@ public class MainDbForUser{
         mDb.close();
     }
 
-    public void writeNumber(int number, String table) {
-        dbHelper = new DbHelper(mContext);
-        mDb = dbHelper.getWritableDatabase();
-        String sql = "INSERT INTO "+ table +" VALUES (?,?);";
-        SQLiteStatement statement = mDb.compileStatement(sql);
-        mDb.beginTransaction();
-        statement.clearBindings();
-        statement.bindLong(2, number);
-        statement.execute();
-        mDb.setTransactionSuccessful();
-        mDb.endTransaction();
-        mDb.close();
-    }
-
     public String getWord(int position, int column, String table){
         String selectQuery = "SELECT * FROM " + table;
         dbHelper  = new DbHelper(mContext);
@@ -251,8 +209,11 @@ public class MainDbForUser{
         return result;
     }
 
+    /*
+        Return random id from learned words where id = 0
+     */
     public int getNotLearnedWords(int position, String table){
-        String selectQuery = "SELECT * FROM " + table + " WHERE " + LEARNED + " = '0' ORDER BY RANDOM()";
+        String selectQuery = "SELECT * FROM " + table + " WHERE " + LEARNED + " IS NULL ORDER BY RANDOM()";
         dbHelper  = new DbHelper(mContext);
         mDb = dbHelper.getReadableDatabase();
         int result;
@@ -268,14 +229,11 @@ public class MainDbForUser{
         dbHelper = new DbHelper(mContext);
         mDb = dbHelper.getReadableDatabase();
         Cursor cursor = mDb.rawQuery(selectQuery, null);
-
         if(cursor.moveToFirst()) {
             do{
                 String number = cursor.getString(1);
-
                 notSortedListForForeignWords.add(number);
                 rowExists = true;
-
             }while(cursor.moveToNext());
         }else{
             rowExists = false;
@@ -597,49 +555,6 @@ public class MainDbForUser{
         cursor.close();
         mDb.close();
         return id;
-    }
-
-    public void writeOwnWords(String table) {
-        dbHelper = new DbHelper(mContext);
-        mDb = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(FOREGIN_WORD, foreginWord);
-        values.put(NATIV_WORD, nativWord);
-        values.put(TRANSCRIPTION, transcription);
-        mDb.insert(table, null, values);
-        mDb.close();
-    }
-
-    public ArrayList<String> listWords(String table) {
-        String selectQuery = "SELECT * FROM " + table;
-        dbHelper = new DbHelper(mContext);
-        mDb = dbHelper.getReadableDatabase();
-        ArrayList<String> list = new ArrayList<>();
-        Cursor cursor = mDb.rawQuery(selectQuery, null);
-        if(cursor.moveToFirst()) {
-            do{
-                list.add(cursor.getString(3));
-            }while(cursor.moveToNext());
-        }
-        cursor.close();
-        mDb.close();
-        return list;
-    }
-
-    public ArrayList<String> listNativeWords(String table) {
-        String selectQuery = "SELECT * FROM " + table;
-        dbHelper = new DbHelper(mContext);
-        mDb = dbHelper.getReadableDatabase();
-        ArrayList<String> list = new ArrayList<>();
-        Cursor cursor = mDb.rawQuery(selectQuery, null);
-        if(cursor.moveToFirst()) {
-            do{
-                list.add(cursor.getString(2));
-            }while(cursor.moveToNext());
-        }
-        cursor.close();
-        mDb.close();
-        return list;
     }
 
 }

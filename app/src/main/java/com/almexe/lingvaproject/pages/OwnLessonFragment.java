@@ -281,7 +281,7 @@ public class OwnLessonFragment extends AbstractFragment implements OnClickListen
 						mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
 
 					utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_1));
-					utils.transactions(getFragmentManager(), new LessonTenWordFragment());
+					utils.transactions(getFragmentManager(), new LessonTenWordFragment(), Utils.LESSON_TEN_WORDS_FRAGMENT);
 
 				}else if(mainDb.getNativeWordById(mainDbForUser.getListId(Tables.getTableMain(),MainDbForUser.OWN).get(0)).equals(wordsFromTextView)
 						&& mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.OWN) == 1){
@@ -292,7 +292,7 @@ public class OwnLessonFragment extends AbstractFragment implements OnClickListen
 						mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
 
 					utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_1));
-					utils.transactions(getFragmentManager(), new LessonTenWordFragment());
+					utils.transactions(getFragmentManager(), new LessonTenWordFragment(), Utils.LESSON_TEN_WORDS_FRAGMENT);
 				}
 
 				break;

@@ -147,7 +147,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
     @Override
     protected void onStop() {
         super.onStop();
-        //stopService(new Intent(this, InitialService.class));
+        stopService(new Intent(this, InitialService.class));
         Log.d(TAG, "onStop");
     }
 
@@ -241,36 +241,38 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
 
         case R.id.navigation_item_1:
             fragment = new LessonTenWordFragment();
+            utils.transactions(getFragmentManager(), fragment, Utils.LESSON_TEN_WORDS_FRAGMENT);
             break;
 
         case R.id.navigation_item_2:
             fragment = new AddOwnWordsFragment();
+            utils.transactions(getFragmentManager(), fragment, Utils.ADD_OWN_WORDS_FRAGMENT);
             break;
 
         case R.id.navigation_item_3:
             fragment = new OwnLessonFragment();
-
+            utils.transactions(getFragmentManager(), fragment, Utils.OWN_LESSON_FRAGMENT);
                /* new Utils().myToast(getApplicationContext(),getLayoutInflater(),getCurrentFocus(),
                         "СЛОВАРЬ ПУСТ", Toast.LENGTH_SHORT);*/
             break;
 
         case R.id.navigation_item_4:
             fragment = new LearnedWordsFragment();
+            utils.transactions(getFragmentManager(), fragment, Utils.LEARNED_WORDS_FRAGMENT);
             break;
 
         case R.id.navigation_item_5:
             fragment = new Settings();
+            utils.transactions(getFragmentManager(), fragment, Utils.SETTINGS_FRAGMENT);
             break;
         default:
             break;
         }
         
         if (fragment != null) {
-            utils.transactions(getFragmentManager(), fragment);
             MenuItem pos = navigationView.getMenu().findItem(position);
             CharSequence title = pos.getTitle();
             setTitle(title);
-
         } else {
             Log.e("MainActivity", "Error in creating fragment");
         }

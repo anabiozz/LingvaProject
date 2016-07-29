@@ -158,7 +158,7 @@ public class WrongResultCheckFragment extends Fragment implements View.OnClickLi
                     message, Toast.LENGTH_SHORT);
 
             utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_1));
-            utils.transactions(getFragmentManager(), new LessonTenWordFragment());
+            utils.transactions(getFragmentManager(), new LessonTenWordFragment(), Utils.LESSON_TEN_WORDS_FRAGMENT);
         }
     }
 

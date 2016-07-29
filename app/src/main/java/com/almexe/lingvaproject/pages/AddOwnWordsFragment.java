@@ -57,9 +57,6 @@ public class AddOwnWordsFragment extends AbstractFragment implements OnClickList
 
 	MainDbForUser mainDbForUser;
 
-	//private final String TOAST_MESSAGE_NO = "Вы Должны Написать Слово и Перевод";
-	private final String TOAST_MESSAGE_OK = "Слова Добавлены";
-	private final String PROSEED_NOK = "Слов не Добавлено";
 	private Utils utils;
 
 	@Override
@@ -130,9 +127,10 @@ public class AddOwnWordsFragment extends AbstractFragment implements OnClickList
 			case R.id.proseedToLesson:
 				if(mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.OWN) != 0) {
 					utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_3));
-					utils.transactions(getFragmentManager(), new OwnLessonFragment());
+					utils.transactions(getFragmentManager(), new OwnLessonFragment(), Utils.OWN_LESSON_FRAGMENT);
 
 				}else{
+					String PROSEED_NOK = "Слов не Добавлено";
 					utils.myToast(getActivity(),getActivity().getLayoutInflater(),getView(),
 							PROSEED_NOK, Toast.LENGTH_SHORT);
 				}
@@ -161,6 +159,7 @@ public class AddOwnWordsFragment extends AbstractFragment implements OnClickList
 					foreignWordEditText.setText(null);
 					nativWordEditText.setText(null);
 
+					String TOAST_MESSAGE_OK = "Слова Добавлены";
 					utils.myToast(getActivity(),getActivity().getLayoutInflater(),getView(),
 							TOAST_MESSAGE_OK, Toast.LENGTH_SHORT);
 				}
