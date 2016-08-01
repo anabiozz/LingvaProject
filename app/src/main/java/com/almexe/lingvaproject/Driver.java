@@ -1,12 +1,16 @@
 package com.almexe.lingvaproject;
 
 import android.app.Fragment;
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,8 +26,9 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.almexe.lingvaproject.db.MainDbForUser;
+import com.almexe.lingvaproject.db.GetDataFromDb;
 import com.almexe.lingvaproject.pages.AddOwnWordsFragment;
 import com.almexe.lingvaproject.pages.LearnedWordsFragment;
 import com.almexe.lingvaproject.pages.LessonTenWordFragment;
@@ -32,9 +37,10 @@ import com.almexe.lingvaproject.pages.Settings;
 import com.almexe.lingvaproject.utils.Constants;
 import com.almexe.lingvaproject.utils.CustomTypefaceSpan;
 import com.almexe.lingvaproject.utils.InitialService;
-import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+
+import java.util.concurrent.ExecutionException;
 
 public class Driver extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -47,10 +53,9 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
     private ActionBarDrawerToggle mDrawerToggle;
     private int mNavItemId;
     private NavigationView navigationView;
+    ServiceConnection AddServiceConnection;
 
     Utils utils;
-
-    protected static Context context;
     public static TextView numberlLearnedWords;
 
     @Override
@@ -61,7 +66,6 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        context = this;
 
         // load saved navigation state if present
         if (null == savedInstanceState) {
@@ -84,7 +88,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
                 R.string.drawer_open,
                 R.string.drawer_close);
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         if (null == savedInstanceState) {
             utils.toolTitle(this,"LingvaApp");
@@ -94,7 +98,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
             selectItem(mNavItemId);
         }
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
+       NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
         View headerView = navigationView.inflateHeaderView(R.layout.drawer_header);
 
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -123,7 +127,6 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         numberAllWords.setTypeface(mainFont);
         numberlLearnedWords.setTypeface(mainFont);
 
-
         imageViewVk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,23 +136,25 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         });
     }
 
-    public static Context getContext() {
-        return context;
-    }
-
     @Override
-    protected void onResume() {
-        super.onResume();
-        startService(new Intent(this, InitialService.class));
-        Log.d(TAG, "onResume");
+    protected void onStart() {
+        super.onStart();
+        Intent it = new Intent(this, InitialService.class);
+        startService(it);
+        Log.e("IRemote", "onStart");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         stopService(new Intent(this, InitialService.class));
-        Log.d(TAG, "onStop");
+        Log.e("IRemote", "onStop");
     }
+
+   /* public static Context getContext() {
+        return context;
+    }*/
+
 
     public void fontMenu(){
         Menu m = navigationView.getMenu();

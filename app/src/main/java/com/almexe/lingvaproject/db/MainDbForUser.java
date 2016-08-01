@@ -148,11 +148,10 @@ public class MainDbForUser{
     public void updateLearned(String table, String column, int id){
             dbHelper  = new DbHelper(mContext);
             mDb = dbHelper.getWritableDatabase();
-            String cmd = "UPDATE '"+table+"' SET 'learned_table'=1 WHERE _id="+id+"";
-            //String insertQuery = String.format("UPDATE '%s' SET '%s'=1 WHERE _id=?", table, column, ID, id);
+            String cmd = "UPDATE '"+table+"' SET '"+column+"'=1 WHERE _id="+id+"";
             mDb.beginTransaction();
                 if (cmd.trim().length() > 0) {
-                    mDb.execSQL(cmd.trim().intern());
+                    mDb.execSQL(cmd.trim());
                     Log.e(TAG, cmd);
                 }
             mDb.setTransactionSuccessful();
@@ -167,10 +166,10 @@ public class MainDbForUser{
         mDb.execSQL("UPDATE "+table+" SET "+column+" = '0' WHERE "+ID+" = "+id+"");
     }
 
-    public void updateToNull(String table, String column, String column2){
+    public void updateToNull(String table, String column){
         dbHelper  = new DbHelper(mContext);
         mDb = dbHelper.getReadableDatabase();
-        mDb.execSQL("UPDATE "+table+" SET "+column+" = '0' WHERE "+column2+" = '1'");
+        mDb.execSQL("UPDATE "+table+" SET "+column+" = NULL WHERE "+column+" IS NOT NULL");
     }
 
     public void updateToOne(String table, String column, String column2){
@@ -181,8 +180,8 @@ public class MainDbForUser{
 
     public void deleteFromTableWhereColumnEqualsOne(String table, String column){
         dbHelper  = new DbHelper(mContext);
-        mDb = dbHelper.getReadableDatabase();
-        mDb.execSQL("DELETE FROM "+table+" WHERE "+column+" = '1'");
+        mDb = dbHelper.getWritableDatabase();
+        mDb.execSQL("DELETE FROM "+table+" WHERE "+column+" = 1");
     }
 
     public void write(String table) {

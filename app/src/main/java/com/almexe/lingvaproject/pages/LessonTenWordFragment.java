@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -27,17 +26,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.almexe.lingvaproject.Application;
 import com.almexe.lingvaproject.Driver;
 import com.almexe.lingvaproject.R;
-import com.almexe.lingvaproject.db.GetDataFromDb;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
 import com.almexe.lingvaproject.utils.Constants;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
-import com.almexe.lingvaproject.utils.VkErrorResponse;
-import com.vk.sdk.VKSdk;
 
 import org.ispeech.SpeechSynthesis;
 import org.ispeech.error.BusyException;
@@ -277,9 +272,15 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         @Override
         protected Void doInBackground(Void... voids) {
             for(int i = 0; i < 10; i++) {
-                mainDbForUser.updateLearned(Tables.getTableMain(), MainDbForUser.LEARNED, mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).get(i));
+                mainDbForUser.update(Tables.getTableMain(), MainDbForUser.LEARNED, mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).get(i));
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            new ChangeWords().execute();
         }
     }
 
@@ -288,7 +289,8 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            mainDbForUser.deleteFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN);
+            mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.TEN);
+           // mainDbForUser.deleteFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN);
             while (mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN) < 10) {
                 for (int i = 0; i < 10; i++) {
                     int result = mainDbForUser.getNotLearnedWords(i, Tables.getTableMain());
@@ -373,16 +375,9 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                 /*if(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED) == 10){
                     utils.wallPost(getActivity(), "Ура вы изучили 10 слов");
                 }*/
-
-                try {
-                    new UpdateLearn().execute().get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
+                synchronized (this){
+                    new UpdateLearn().execute();
                 }
-
-                new ChangeWords().execute();
 
                 dialog.cancel();
             }

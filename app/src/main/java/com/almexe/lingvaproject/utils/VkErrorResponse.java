@@ -15,12 +15,8 @@ import com.almexe.lingvaproject.db.MainDbForUser;
 public class VkErrorResponse extends AsyncTask<Void, Void, Void> {
     private MainDbForUser mainDbForUser;
     private MainDb mainDb;
-    Context context;
-    private LinearLayout linearLayout;
 
     public VkErrorResponse() {
-        View v = View.inflate(Driver.getContext(), R.layout.activity_main, null);
-        linearLayout = (LinearLayout) v.findViewById(R.id.header_progress);
     }
 
     @Override
@@ -28,7 +24,6 @@ public class VkErrorResponse extends AsyncTask<Void, Void, Void> {
         super.onPreExecute();
         mainDbForUser = new MainDbForUser(Application.getContext());
         mainDb = new MainDb(Application.getContext());
-        linearLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -51,7 +46,5 @@ public class VkErrorResponse extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         //Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED)));
-
-        linearLayout.setVisibility(View.INVISIBLE);
     }
 }

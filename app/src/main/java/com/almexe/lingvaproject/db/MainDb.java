@@ -43,14 +43,6 @@ public class MainDb extends SQLiteOpenHelper{
 	
 	public String foreginWord, nativWord;
 
-	/*private static MainDb sMainDb = null;
-	public static MainDb getInstance() {
-		if (sMainDb == null) {
-			sMainDb = new MainDb(Application.getContext());
-		}
-		return sMainDb;
-	}*/
-
 	public MainDb(Context context) {
     	super(context, DB_NAME, null, 1);
     	 if(android.os.Build.VERSION.SDK_INT >= 4.2){
@@ -89,7 +81,7 @@ public class MainDb extends SQLiteOpenHelper{
     	//Get Stream
     	OutputStream myOutput = new FileOutputStream(outFileName);
 
-    	byte[] buffer = new byte[1024];
+    	byte[] buffer = new byte[2048];
     	int length;
     	while ((length = myInput.read(buffer))>0){
     		myOutput.write(buffer, 0, length);
