@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.almexe.lingvaproject.Application;
 import com.almexe.lingvaproject.Driver;
-import com.almexe.lingvaproject.db.GetDataFromDb;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
 import com.vk.sdk.VKScope;
@@ -21,7 +20,7 @@ public class InitialService extends Service{
     final String LOG_TAG = "myLogs";
     protected String[] scope = new String[]{VKScope.WALL, VKScope.PHOTOS};
     MainDb mainDb;
-
+    MainDbForUser mainDbForUser;
 
     public class LocalBinder extends Binder {
         public InitialService getService() {
@@ -38,8 +37,6 @@ public class InitialService extends Service{
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(LOG_TAG, "onStartCommand");
-        //getDataFromDb();
-        //new GetDataFromDb().execute();
         DataBase mr = new DataBase();
         new Thread(mr).start();
 
@@ -57,6 +54,12 @@ public class InitialService extends Service{
     @Override
     public IBinder onBind(Intent intent) {
         return localBinder;
+    }
+
+    public int getCountLearnedWords() {
+        MainDbForUser mainDbForUser = new MainDbForUser(Application.getContext());
+        int count = mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED);
+        return count;
     }
 
     class DataBase implements Runnable {
@@ -84,7 +87,7 @@ public class InitialService extends Service{
                 VKSdk.login(new Driver(), scope);
             else{
                 Tables.setTableMain("defaultuser");
-                MainDbForUser mainDbForUser = new MainDbForUser(Application.getContext());
+                mainDbForUser = new MainDbForUser(Application.getContext());
                 if(!mainDbForUser.isExists(Tables.getTableMain())) {
                     mainDbForUser.createTable(Tables.getTableMain());
                     mainDbForUser.insert(Tables.getTableMain());
@@ -95,6 +98,7 @@ public class InitialService extends Service{
                         }
                     }
                 }
+                //Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED)));
             }
         }
     }

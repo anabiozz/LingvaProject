@@ -290,7 +290,6 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         @Override
         protected Void doInBackground(Void... voids) {
             mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.TEN);
-           // mainDbForUser.deleteFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN);
             while (mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN) < 10) {
                 for (int i = 0; i < 10; i++) {
                     int result = mainDbForUser.getNotLearnedWords(i, Tables.getTableMain());
@@ -375,9 +374,8 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                 /*if(mainDbForUser.getCountLessonWordsFromTen(Tables.getTableMain(), MainDbForUser.LEARNED) == 10){
                     utils.wallPost(getActivity(), "Ура вы изучили 10 слов");
                 }*/
-                synchronized (this){
-                    new UpdateLearn().execute();
-                }
+
+                new UpdateLearn().execute();
 
                 dialog.cancel();
             }

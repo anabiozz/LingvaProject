@@ -1,9 +1,7 @@
 package com.almexe.lingvaproject;
 
 import android.app.Fragment;
-import android.app.Service;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
@@ -28,19 +26,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.almexe.lingvaproject.db.GetDataFromDb;
 import com.almexe.lingvaproject.pages.AddOwnWordsFragment;
 import com.almexe.lingvaproject.pages.LearnedWordsFragment;
 import com.almexe.lingvaproject.pages.LessonTenWordFragment;
 import com.almexe.lingvaproject.pages.OwnLessonFragment;
 import com.almexe.lingvaproject.pages.Settings;
+import com.almexe.lingvaproject.pages.StartFragment;
 import com.almexe.lingvaproject.utils.Constants;
 import com.almexe.lingvaproject.utils.CustomTypefaceSpan;
 import com.almexe.lingvaproject.utils.InitialService;
 import com.almexe.lingvaproject.utils.Utils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-
-import java.util.concurrent.ExecutionException;
 
 public class Driver extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -53,8 +49,9 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
     private ActionBarDrawerToggle mDrawerToggle;
     private int mNavItemId;
     private NavigationView navigationView;
-    ServiceConnection AddServiceConnection;
-
+    boolean mBounded;
+    InitialService initialService;
+    private int countLearnedWords;
     Utils utils;
     public static TextView numberlLearnedWords;
 
@@ -136,17 +133,47 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         });
     }
 
+    public void setTextv2(String string) {
+        numberlLearnedWords.setText(string);
+    }
+
+
+    ServiceConnection mConnection = new ServiceConnection() {
+
+        public void onServiceDisconnected(ComponentName name) {
+            Toast.makeText(getApplicationContext(), "Service is disconnected", 1000).show();
+            mBounded = false;
+            initialService = null;
+        }
+
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Toast.makeText(getApplicationContext(), "Service is connected", 1000).show();
+            mBounded = true;
+            InitialService.LocalBinder mLocalBinder = (InitialService.LocalBinder)service;
+            initialService = mLocalBinder.getService();
+            countLearnedWords = initialService.getCountLearnedWords();
+            Log.e(TAG, String.valueOf(countLearnedWords));
+            setTextv2(String.valueOf(countLearnedWords));
+        }
+    };
+
     @Override
     protected void onStart() {
         super.onStart();
         Intent it = new Intent(this, InitialService.class);
         startService(it);
+        bindService(it, mConnection, BIND_AUTO_CREATE);
         Log.e("IRemote", "onStart");
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        if(mBounded) {
+            unbindService(mConnection);
+            mBounded = false;
+        }
         stopService(new Intent(this, InitialService.class));
         Log.e("IRemote", "onStop");
     }
@@ -241,7 +268,8 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         switch (position) {
 
         case 0:
-            //fragment = new StartFragment();
+            fragment = new StartFragment();
+            utils.transactions(getFragmentManager(), fragment, Utils.START_FRAGMENT);
             break;
 
         case R.id.navigation_item_1:
@@ -274,7 +302,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
             break;
         }
         
-        if (fragment != null) {
+        if (fragment != null && position != 0) {
             MenuItem pos = navigationView.getMenu().findItem(position);
             CharSequence title = pos.getTitle();
             setTitle(title);

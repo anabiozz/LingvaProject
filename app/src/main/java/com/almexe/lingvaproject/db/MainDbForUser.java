@@ -145,21 +145,6 @@ public class MainDbForUser{
 
     }
 
-    public void updateLearned(String table, String column, int id){
-            dbHelper  = new DbHelper(mContext);
-            mDb = dbHelper.getWritableDatabase();
-            String cmd = "UPDATE '"+table+"' SET '"+column+"'=1 WHERE _id="+id+"";
-            mDb.beginTransaction();
-                if (cmd.trim().length() > 0) {
-                    mDb.execSQL(cmd.trim());
-                    Log.e(TAG, cmd);
-                }
-            mDb.setTransactionSuccessful();
-            mDb.endTransaction();
-            mDb.close();
-
-    }
-
     public void updateToNull(String table, String column, int id){
         dbHelper  = new DbHelper(mContext);
         mDb = dbHelper.getReadableDatabase();
