@@ -59,10 +59,6 @@ public class LearnedWordsFragment extends AbstractFragment{
         RecyclerView rv = (RecyclerView)v.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(new WordsListAdapter(createListData(),createNativeListData()));
-
-        /*Login/Logout Button*/
-        //Vkloginlogout();
-
         return v;
     }
 

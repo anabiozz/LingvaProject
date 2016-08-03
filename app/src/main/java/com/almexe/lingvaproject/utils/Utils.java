@@ -75,10 +75,28 @@ public class Utils extends Fragment{
         ((Driver)a).setTitle(mNewTitle);
     }
 
-    public void transactions(FragmentManager fragmentManager, Fragment fragment, String tag){
+    public void transactionsWithAnimation(FragmentManager fragmentManager, Fragment fragment, String tag){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit);
         fragmentTransaction.replace(R.id.content_frame, fragment, tag).commit();
+    }
+
+    public void transactions(FragmentManager fragmentManager, Fragment fragment, String tag){
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, fragment, tag).commit();
+    }
+
+    public static void updateText(Activity act, final String resID, int id) {
+        final TextView loadingText = (TextView) act.findViewById(id);
+        act.runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                loadingText.setText(resID);
+
+            }
+
+        });
     }
 
     public void wallPost(Activity a, final String message){

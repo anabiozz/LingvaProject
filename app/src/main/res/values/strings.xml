@@ -40,6 +40,7 @@
     <string name="yes_login_vk">да, залогиниться с помощью аккаунта VK</string>
     <string name="long_speech_vk">Для регистрации вы можете использовать аккаунт в VK. В дальнейшем вы можете авторизоваться при нажатии на иконку VK в правом верхнем углу навигационной панели</string>
     <string name="result_count_word" >%1$d/%2$d</string>
+    <string name="vk">Войти с помощью VK</string>
 
     <integer name="com_vk_sdk_AppId">5172767</integer>
     <integer name="allWords">6000</integer>

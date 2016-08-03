@@ -81,11 +81,11 @@ public class LoginActivity extends FragmentActivity {
     }
 
     public void showLogout() {
-        //utils.transactions(getFragmentManager(), new LogoutFragment());
+        //utils.transactionsWithAnimation(getFragmentManager(), new LogoutFragment());
     }
 
     public void showLogin() {
-        //utils.transactions(getFragmentManager(), new LoginFragment());
+        //utils.transactionsWithAnimation(getFragmentManager(), new LoginFragment());
     }
 
     @Override
@@ -132,7 +132,7 @@ public class LoginActivity extends FragmentActivity {
 
     private void startTestActivity() {
         utils.toolTitle(this, getResources().getString(R.string.navigation_item_1));
-        //utils.transactions(getFragmentManager(), new LessonTenWordFragment());
+        //utils.transactionsWithAnimation(getFragmentManager(), new LessonTenWordFragment());
     }
 
     public static class LoginFragment extends android.app.Fragment {

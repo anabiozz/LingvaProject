@@ -37,11 +37,6 @@ public class InitialService extends Service{
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(LOG_TAG, "onStartCommand");
-        DataBase mr = new DataBase();
-        new Thread(mr).start();
-
-        CreateTable createTable = new CreateTable();
-        new Thread(createTable).start();
 
         return START_STICKY;
     }
@@ -53,13 +48,16 @@ public class InitialService extends Service{
 
     @Override
     public IBinder onBind(Intent intent) {
+        DataBase mr = new DataBase();
+        new Thread(mr).start();
+        CreateTable createTable = new CreateTable();
+        new Thread(createTable).start();
         return localBinder;
     }
 
     public int getCountLearnedWords() {
         MainDbForUser mainDbForUser = new MainDbForUser(Application.getContext());
-        int count = mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED);
-        return count;
+        return mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED);
     }
 
     class DataBase implements Runnable {
@@ -98,7 +96,6 @@ public class InitialService extends Service{
                         }
                     }
                 }
-                //Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED)));
             }
         }
     }

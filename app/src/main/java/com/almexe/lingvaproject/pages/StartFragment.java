@@ -43,8 +43,6 @@ public class StartFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_start, container, false);
-       /* MainDbForUser mainDbForUser = new MainDbForUser(Application.getContext());
-        Driver.numberlLearnedWords.setText(String.valueOf(mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED)));*/
         Log.e(TAG, "onCreate");
         return v;
     }

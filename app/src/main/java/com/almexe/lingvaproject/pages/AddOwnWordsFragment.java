@@ -1,49 +1,25 @@
 package com.almexe.lingvaproject.pages;
 
-import android.app.Dialog;
-import android.app.Fragment;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.almexe.lingvaproject.Driver;
 import com.almexe.lingvaproject.R;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
-import com.almexe.lingvaproject.db.UserDb;
-import com.almexe.lingvaproject.utils.CircleTransform;
 import com.almexe.lingvaproject.utils.Constants;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
-import com.squareup.picasso.Picasso;
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKCallback;
-import com.vk.sdk.VKScope;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKParameters;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKApiUser;
-import com.vk.sdk.api.model.VKList;
-
-import java.util.concurrent.ExecutionException;
 
 public class AddOwnWordsFragment extends AbstractFragment implements OnClickListener{
 
@@ -127,7 +103,7 @@ public class AddOwnWordsFragment extends AbstractFragment implements OnClickList
 			case R.id.proseedToLesson:
 				if(mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.OWN) != 0) {
 					utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_3));
-					utils.transactions(getFragmentManager(), new OwnLessonFragment(), Utils.OWN_LESSON_FRAGMENT);
+					utils.transactionsWithAnimation(getFragmentManager(), new OwnLessonFragment(), Utils.OWN_LESSON_FRAGMENT);
 
 				}else{
 					String PROSEED_NOK = "Слов не Добавлено";

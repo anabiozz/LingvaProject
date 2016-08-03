@@ -3,6 +3,7 @@
     package="com.almexe.lingvaproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <permission
         android:name=".utils.InitialService"
         android:protectionLevel="dangerous"/>
@@ -36,10 +37,14 @@
             android:screenOrientation="portrait">
         </activity>
 
-
         <meta-data
             android:name="ispeech_api_key"
             android:value="024741213c2ea3565859bfc757f1e6b5" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="c6340a068433527de90298087431f72eddcd9b54"/>
+
         <service
             android:name=".utils.InitialService"
             android:enabled="true"

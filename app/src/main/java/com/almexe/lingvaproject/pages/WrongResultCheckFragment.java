@@ -11,11 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.almexe.lingvaproject.Driver;
 import com.almexe.lingvaproject.R;
 import com.almexe.lingvaproject.adapter.RecyclerItemClickListener;
 import com.almexe.lingvaproject.adapter.WordsListAdapter;
@@ -158,7 +156,7 @@ public class WrongResultCheckFragment extends Fragment implements View.OnClickLi
                     message, Toast.LENGTH_SHORT);
 
             utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_1));
-            utils.transactions(getFragmentManager(), new LessonTenWordFragment(), Utils.LESSON_TEN_WORDS_FRAGMENT);
+            utils.transactionsWithAnimation(getFragmentManager(), new LessonTenWordFragment(), Utils.LESSON_TEN_WORDS_FRAGMENT);
         }
     }
 

@@ -37,13 +37,15 @@ import com.almexe.lingvaproject.utils.CustomTypefaceSpan;
 import com.almexe.lingvaproject.utils.InitialService;
 import com.almexe.lingvaproject.utils.Utils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+
+import io.fabric.sdk.android.Fabric;
 
 public class Driver extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
 
-    private static final long DRAWER_CLOSE_DELAY_MS = 250;
-    private static final String NAV_ITEM_ID = "navItemId";
-    private static final String TAG = "Driver";
 
+    public static final String TAG = "Driver";
     private final Handler mDrawerActionHandler = new Handler();
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -51,9 +53,9 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
     private NavigationView navigationView;
     boolean mBounded;
     InitialService initialService;
-    private int countLearnedWords;
     Utils utils;
-    public static TextView numberlLearnedWords;
+    private static final String TWITTER_KEY = "ab3HXTn6fXUXVLEEubs5ZXV9Q";
+    private static final String TWITTER_SECRET = "pJn6repBWuSYwnclFDzWTMBANQ3pdZ9I6Ph5CCRb58q3nktRtb";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +66,14 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
+
         // load saved navigation state if present
         if (null == savedInstanceState) {
             mNavItemId = R.id.navigation_item_1;
         } else {
-            mNavItemId = savedInstanceState.getInt(NAV_ITEM_ID);
+            mNavItemId = savedInstanceState.getInt(Constants.NAV_ITEM_ID);
         }
 
         // listen for navigation events
@@ -95,7 +100,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
             selectItem(mNavItemId);
         }
 
-       NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
         View headerView = navigationView.inflateHeaderView(R.layout.drawer_header);
 
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -105,7 +110,6 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         ImageView image = (ImageView) headerView.findViewById(R.id.headerImageView);
         TextView headerName = (TextView) headerView.findViewById(R.id.headerName);
         TextView headerLastName = (TextView) headerView.findViewById(R.id.headerLastName);
-        ImageView imageViewVk = (ImageView) headerView.findViewById(R.id.headerImageVk);
 
         Typeface mainFont = Typeface.createFromAsset(getAssets(), Constants.TYPEFONT);
 
@@ -115,7 +119,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         TextView allWords = (TextView)headerView.findViewById(R.id.allWords);
         TextView numberAllWords = (TextView)headerView.findViewById(R.id.numberAllWords);
         TextView learnedWords = (TextView)headerView.findViewById(R.id.learnedWords);
-        numberlLearnedWords = (TextView) headerView.findViewById(R.id.numberlLearnedWords);
+        TextView numberlLearnedWords = (TextView) headerView.findViewById(R.id.numberlLearnedWords);
 
         numberAllWords.setText(String.valueOf(Constants.NUMBERWORD));
 
@@ -123,37 +127,24 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         learnedWords.setTypeface(mainFont);
         numberAllWords.setTypeface(mainFont);
         numberlLearnedWords.setTypeface(mainFont);
-
-        imageViewVk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Constants.ACTION_LOGIN_VK);
-                sendBroadcast(intent);
-            }
-        });
     }
-
-    public void setTextv2(String string) {
-        numberlLearnedWords.setText(string);
-    }
-
 
     ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceDisconnected(ComponentName name) {
-            Toast.makeText(getApplicationContext(), "Service is disconnected", 1000).show();
+            Toast.makeText(getApplicationContext(), "Service is disconnected", Toast.LENGTH_SHORT).show();
             mBounded = false;
             initialService = null;
         }
 
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Toast.makeText(getApplicationContext(), "Service is connected", 1000).show();
+            Toast.makeText(getApplicationContext(), "Service is connected", Toast.LENGTH_SHORT).show();
             mBounded = true;
             InitialService.LocalBinder mLocalBinder = (InitialService.LocalBinder)service;
             initialService = mLocalBinder.getService();
-            countLearnedWords = initialService.getCountLearnedWords();
+            int countLearnedWords = initialService.getCountLearnedWords();
             Log.e(TAG, String.valueOf(countLearnedWords));
-            setTextv2(String.valueOf(countLearnedWords));
+            Utils.updateText(Driver.this, String.valueOf(countLearnedWords), R.id.numberlLearnedWords);
         }
     };
 
@@ -161,7 +152,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
     protected void onStart() {
         super.onStart();
         Intent it = new Intent(this, InitialService.class);
-        startService(it);
+        //startService(it);
         bindService(it, mConnection, BIND_AUTO_CREATE);
         Log.e("IRemote", "onStart");
 
@@ -174,14 +165,9 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
             unbindService(mConnection);
             mBounded = false;
         }
-        stopService(new Intent(this, InitialService.class));
+        //stopService(new Intent(this, InitialService.class));
         Log.e("IRemote", "onStop");
     }
-
-   /* public static Context getContext() {
-        return context;
-    }*/
-
 
     public void fontMenu(){
         Menu m = navigationView.getMenu();
@@ -219,7 +205,6 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         // update highlighted item in the navigation menu
         menuItem.setChecked(true);
         mNavItemId = menuItem.getItemId();
-
         // allow some time after closing the drawer before performing real navigation
         // so the user can see what is happening
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -228,7 +213,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
             public void run() {
                 selectItem(menuItem.getItemId());
             }
-        }, DRAWER_CLOSE_DELAY_MS);
+        }, Constants.DRAWER_CLOSE_DELAY_MS);
         return true;
     }
 
@@ -258,7 +243,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(NAV_ITEM_ID, mNavItemId);
+        outState.putInt(Constants.NAV_ITEM_ID, mNavItemId);
     }
 	
     public void selectItem(int position) {
@@ -274,29 +259,34 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
 
         case R.id.navigation_item_1:
             fragment = new LessonTenWordFragment();
-            utils.transactions(getFragmentManager(), fragment, Utils.LESSON_TEN_WORDS_FRAGMENT);
+            utils.transactionsWithAnimation(getFragmentManager(), fragment, Utils.LESSON_TEN_WORDS_FRAGMENT);
             break;
 
         case R.id.navigation_item_2:
             fragment = new AddOwnWordsFragment();
-            utils.transactions(getFragmentManager(), fragment, Utils.ADD_OWN_WORDS_FRAGMENT);
+            utils.transactionsWithAnimation(getFragmentManager(), fragment, Utils.ADD_OWN_WORDS_FRAGMENT);
             break;
 
         case R.id.navigation_item_3:
             fragment = new OwnLessonFragment();
-            utils.transactions(getFragmentManager(), fragment, Utils.OWN_LESSON_FRAGMENT);
+            utils.transactionsWithAnimation(getFragmentManager(), fragment, Utils.OWN_LESSON_FRAGMENT);
                /* new Utils().myToast(getApplicationContext(),getLayoutInflater(),getCurrentFocus(),
                         "СЛОВАРЬ ПУСТ", Toast.LENGTH_SHORT);*/
             break;
 
         case R.id.navigation_item_4:
             fragment = new LearnedWordsFragment();
-            utils.transactions(getFragmentManager(), fragment, Utils.LEARNED_WORDS_FRAGMENT);
+            utils.transactionsWithAnimation(getFragmentManager(), fragment, Utils.LEARNED_WORDS_FRAGMENT);
             break;
 
         case R.id.navigation_item_5:
             fragment = new Settings();
-            utils.transactions(getFragmentManager(), fragment, Utils.SETTINGS_FRAGMENT);
+            utils.transactionsWithAnimation(getFragmentManager(), fragment, Utils.SETTINGS_FRAGMENT);
+            break;
+
+        case R.id.navigation_item_6:
+            fragment = new Settings();
+            utils.transactionsWithAnimation(getFragmentManager(), fragment, Utils.SETTINGS_FRAGMENT);
             break;
         default:
             break;

@@ -1,12 +1,8 @@
 package com.almexe.lingvaproject.pages;
 
-import android.app.Dialog;
-import android.app.Fragment;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.media.AudioManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.GestureDetector;
@@ -15,40 +11,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.almexe.lingvaproject.Driver;
 import com.almexe.lingvaproject.R;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
-import com.almexe.lingvaproject.db.UserDb;
-import com.almexe.lingvaproject.utils.CircleTransform;
 import com.almexe.lingvaproject.utils.Constants;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
-import com.squareup.picasso.Picasso;
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKCallback;
-import com.vk.sdk.VKScope;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKParameters;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKApiUser;
-import com.vk.sdk.api.model.VKList;
 
 import org.ispeech.SpeechSynthesis;
 import org.ispeech.error.BusyException;
 import org.ispeech.error.InvalidApiKeyException;
 import org.ispeech.error.NoNetworkException;
-
-import java.util.concurrent.ExecutionException;
 
 public class OwnLessonFragment extends AbstractFragment implements OnClickListener{
 
@@ -117,9 +93,6 @@ public class OwnLessonFragment extends AbstractFragment implements OnClickListen
 		deleteWord.setOnClickListener(this);
 		voice.setOnClickListener(this);
 		mainDataTextView.setOnClickListener(this);
-
-		/*Login/Logout Button*/
-	//	Vkloginlogout();
 
 		return v;
 	}
@@ -281,7 +254,7 @@ public class OwnLessonFragment extends AbstractFragment implements OnClickListen
 						mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
 
 					utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_1));
-					utils.transactions(getFragmentManager(), new LessonTenWordFragment(), Utils.LESSON_TEN_WORDS_FRAGMENT);
+					utils.transactionsWithAnimation(getFragmentManager(), new LessonTenWordFragment(), Utils.LESSON_TEN_WORDS_FRAGMENT);
 
 				}else if(mainDb.getNativeWordById(mainDbForUser.getListId(Tables.getTableMain(),MainDbForUser.OWN).get(0)).equals(wordsFromTextView)
 						&& mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.OWN) == 1){
@@ -292,7 +265,7 @@ public class OwnLessonFragment extends AbstractFragment implements OnClickListen
 						mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
 
 					utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_1));
-					utils.transactions(getFragmentManager(), new LessonTenWordFragment(), Utils.LESSON_TEN_WORDS_FRAGMENT);
+					utils.transactionsWithAnimation(getFragmentManager(), new LessonTenWordFragment(), Utils.LESSON_TEN_WORDS_FRAGMENT);
 				}
 
 				break;

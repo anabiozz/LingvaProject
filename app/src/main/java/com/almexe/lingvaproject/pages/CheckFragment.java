@@ -21,7 +21,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.almexe.lingvaproject.Driver;
 import com.almexe.lingvaproject.R;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
@@ -283,7 +282,7 @@ public class CheckFragment extends Fragment implements OnClickListener{
                     if(count == 9) {
                         if(wrongResultWords.size() == 0){
                             //utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_1));
-                            utils.transactions(getFragmentManager(), new LessonTenWordFragment(), Utils.LESSON_TEN_WORDS_FRAGMENT);
+                            utils.transactionsWithAnimation(getFragmentManager(), new LessonTenWordFragment(), Utils.LESSON_TEN_WORDS_FRAGMENT);
 
                             final Dialog dialog = new Dialog(getActivity());
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -309,7 +308,7 @@ public class CheckFragment extends Fragment implements OnClickListener{
                         }else{
                             Log.e("wrongResultWords", String.valueOf(wrongResultWords));
                             //utils.toolTitle(getActivity(), getResources().getString(R.string.navigation_item_1));
-                            utils.transactions(getFragmentManager(), new WrongResultCheckFragment(), Utils.WRONG_RESULT_FRAGMENT);
+                            utils.transactionsWithAnimation(getFragmentManager(), new WrongResultCheckFragment(), Utils.WRONG_RESULT_FRAGMENT);
                         }
 
                     }
