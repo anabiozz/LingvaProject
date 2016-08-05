@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/musician6"
             android:contentDescription="@string/description"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="40dp"/>
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="40dp"/>
 
     </RelativeLayout>
 
@@ -38,8 +38,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:textColor="@color/colorTextPrimary"
-            android:textSize="60sp"
-            android:text="text"/>
+            android:textSize="60sp" />
 
         <LinearLayout
             android:id="@+id/LinearLayout"
@@ -59,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="10sp"
                     android:textColor="#000000"
                     android:textSize="25sp"
@@ -70,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:checked="true"
                     android:textColor="#000000"
                     android:textSize="25sp"
@@ -81,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:checked="true"
                     android:textColor="#000000"
                     android:textSize="25sp"
@@ -91,7 +90,7 @@
                     android:id="@+id/chk4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:textColor="#000000"
                     android:textSize="25sp"
                     android:theme="@style/MyColor"/>
@@ -101,10 +100,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:layout_marginBottom="50dp">
 
                 <Button
                     android:id="@+id/btnCheck"
+                    android:height="90dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorAccent"

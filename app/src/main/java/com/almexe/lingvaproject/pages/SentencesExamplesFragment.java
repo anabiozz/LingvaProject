@@ -1,8 +1,10 @@
 package com.almexe.lingvaproject.pages;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,24 @@ public class SentencesExamplesFragment extends BaseFragment{
         RecyclerView rv = (RecyclerView)v.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(new SentencesListAdapter(createListData()));
+
+        if(getView() != null) {
+            getView().setFocusableInTouchMode(true);
+            getView().requestFocus();
+            getView().setOnKeyListener( new View.OnKeyListener()
+            {
+                @Override
+                public boolean onKey( View v, int keyCode, KeyEvent event )
+                {
+                    if( keyCode == KeyEvent.KEYCODE_BACK )
+                    {
+                        getFragmentManager().popBackStack();
+                        return true;
+                    }
+                    return false;
+                }
+            } );
+        }
         return v;
     }
 

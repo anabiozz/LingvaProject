@@ -402,8 +402,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.exercise:
-                fragmentManager.beginTransaction().replace(R.id.content_frame, new CheckFragment()).commit();
-
+                utils.transactionsWithAnimation(getFragmentManager(), new CheckFragment(), Utils.CHECK_FRAGMENT);
                 break;
 
             case R.id.fab:
@@ -430,8 +429,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                 break;
 
             case R.id.examples:
-                fragmentManager.beginTransaction().replace(R.id.content_frame, new SentencesExamplesFragment()).commit();
-
+                utils.transactionsWithAnimation(getFragmentManager(), new SentencesExamplesFragment(), Utils.EXAMPLES_SENTENCES_FRAGMENT);
                 break;
         }
     }

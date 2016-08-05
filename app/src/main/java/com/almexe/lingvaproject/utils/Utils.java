@@ -50,6 +50,7 @@ public class Utils extends Fragment{
     public static final String WRONG_RESULT_FRAGMENT = "WRONG_RESULT_FRAGMENT" ;
     public static final String SETTINGS_FRAGMENT = "SETTINGS_FRAGMENT" ;
     public static final String START_FRAGMENT = "START_FRAGMENT" ;
+    public static final String EXAMPLES_SENTENCES_FRAGMENT = "EXAMPLES_SENTENCES_FRAGMENT" ;
 
     public void myToast(Context context, LayoutInflater inflater, View v,
                         String message, int toastLength){
@@ -78,7 +79,7 @@ public class Utils extends Fragment{
     public void transactionsWithAnimation(FragmentManager fragmentManager, Fragment fragment, String tag){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-        fragmentTransaction.replace(R.id.content_frame, fragment, tag).commit();
+        fragmentTransaction.replace(R.id.content_frame, fragment, tag).addToBackStack(tag).commit();
     }
 
     public void transactions(FragmentManager fragmentManager, Fragment fragment, String tag){
