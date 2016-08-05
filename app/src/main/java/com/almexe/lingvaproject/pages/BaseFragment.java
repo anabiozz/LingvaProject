@@ -44,7 +44,7 @@ import com.vk.sdk.api.model.VKList;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-public class AbstractFragment extends Fragment{
+public class BaseFragment extends Fragment{
 
     //public static MainDbForUser mainDbForUser;
     //public static UserDb userDb;
@@ -123,7 +123,7 @@ public class AbstractFragment extends Fragment{
                     dialog.show();
                     *//*************************************************************//*
                 }else{
-                    VKSdk.login(AbstractFragment.this, scope);
+                    VKSdk.login(BaseFragment.this, scope);
                 }
             }
         });

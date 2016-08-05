@@ -152,7 +152,6 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
     protected void onStart() {
         super.onStart();
         Intent it = new Intent(this, InitialService.class);
-        //startService(it);
         bindService(it, mConnection, BIND_AUTO_CREATE);
         Log.e("IRemote", "onStart");
 
@@ -165,7 +164,6 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
             unbindService(mConnection);
             mBounded = false;
         }
-        //stopService(new Intent(this, InitialService.class));
         Log.e("IRemote", "onStop");
     }
 
@@ -253,8 +251,8 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         switch (position) {
 
         case 0:
-            fragment = new StartFragment();
-            utils.transactions(getFragmentManager(), fragment, Utils.START_FRAGMENT);
+            //fragment = new StartFragment();
+            //utils.transactions(getFragmentManager(), fragment, Utils.START_FRAGMENT);
             break;
 
         case R.id.navigation_item_1:
@@ -292,7 +290,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
             break;
         }
         
-        if (fragment != null && position != 0) {
+        if (fragment != null) {
             MenuItem pos = navigationView.getMenu().findItem(position);
             CharSequence title = pos.getTitle();
             setTitle(title);

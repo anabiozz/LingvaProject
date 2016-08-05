@@ -21,7 +21,7 @@ import com.almexe.lingvaproject.utils.Constants;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
 
-public class AddOwnWordsFragment extends AbstractFragment implements OnClickListener{
+public class AddOwnWordsFragment extends BaseFragment implements OnClickListener{
 
 	AutoCompleteTextView    foreignWordEditText;
 	AutoCompleteTextView    nativWordEditText;

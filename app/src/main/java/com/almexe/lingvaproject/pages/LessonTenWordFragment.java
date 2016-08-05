@@ -40,21 +40,18 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.tweetui.SearchTimeline;
 import com.twitter.sdk.android.tweetui.TimelineResult;
-import com.twitter.sdk.android.tweetui.TweetUtils;
 
 import org.ispeech.SpeechSynthesis;
 import org.ispeech.error.BusyException;
 import org.ispeech.error.InvalidApiKeyException;
 import org.ispeech.error.NoNetworkException;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LessonTenWordFragment extends Fragment implements OnClickListener {
 
-    protected ImageButton  addForLearning;
+    protected ImageButton  examples;
     protected TextView mainDataTextView;
     protected TextView translate;
     protected TextView countWord;
@@ -68,6 +65,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     protected MainDbForUser mainDbForUser;
     protected MainDb mainDb;
     protected int wordCount = 0;
+    FragmentManager fragmentManager;
 
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String TAG = "LessonTenWordFragment";
@@ -88,7 +86,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         prepareTTSEngine();
         synthesis.setStreamType(AudioManager.STREAM_MUSIC);
         /***************************************************/
-
+        fragmentManager = getFragmentManager();
 
         /*Login/Logout Button*/
         //Vkloginlogout();
@@ -109,12 +107,12 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         countWord =         (TextView)v.findViewById(R.id.countWord);
         ImageButton exerciseButton = (ImageButton) v.findViewById(R.id.exercise);
         ImageButton voiceButton = (ImageButton) v.findViewById(R.id.voice);
-        addForLearning = (ImageButton)v.findViewById(R.id.addForLearning);
+        examples = (ImageButton)v.findViewById(R.id.examples);
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         exerciseButton.setOnClickListener(this);
         voiceButton.setOnClickListener(this);
         mainDataTextView.setOnClickListener(this);
-        addForLearning.setOnClickListener(this);
+        examples.setOnClickListener(this);
         fab.setOnClickListener(this);
 
         Log.e(TAG, "onCreateView");
@@ -129,9 +127,6 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         font();
 
         getTweet();
-
-
-
 
         mainDataTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -156,20 +151,49 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         return commentstr;
     }
 
+    private String removeNotEnglish(String commentstr)
+    {
+        String urlPattern = "!/^[\\x20-\\x7E]+$/";
+        Pattern p = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(commentstr);
+        int i = 0;
+        while (m.find()) {
+            commentstr = commentstr.replaceAll(m.group(i),"").trim();
+            i++;
+        }
+        return commentstr;
+    }
+
+    private String removeDog(String commentstr)
+    {
+        String urlPattern = "!/^[A-Z]+$/i";
+        Pattern p = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(commentstr);
+        int i = 0;
+        while (m.find()) {
+            commentstr = commentstr.replaceAll(m.group(i),"").trim();
+            i++;
+        }
+        return commentstr;
+    }
+
+
+
 
     public void getTweet() {
         final SearchTimeline searchTimeline = new SearchTimeline.Builder()
                 .query(mainDataTextView.getText().toString())
                 .build();
 
-        searchTimeline.next(5109081339174837104L, new Callback<TimelineResult<Tweet>>() {
+        searchTimeline.next(510908133917487104L, new Callback<TimelineResult<Tweet>>() {
 
             @Override
             public void success(Result<TimelineResult<Tweet>> result) {
                 if (!result.data.items.isEmpty()) {
-
                     String rowString = result.data.items.get(0).text;
-                    twitts.setText(removeUrl(rowString));
+                    twitts.setText(removeDog(removeNotEnglish(removeUrl(rowString))));
+                } else {
+                    Toast.makeText(getActivity(), "empty", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -378,8 +402,6 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.exercise:
-
-                FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.content_frame, new CheckFragment()).commit();
 
                 break;
@@ -405,6 +427,10 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                 } catch (BusyException | NoNetworkException e1) {
                     e1.printStackTrace();
                 }
+                break;
+
+            case R.id.examples:
+                fragmentManager.beginTransaction().replace(R.id.content_frame, new SentencesExamplesFragment()).commit();
 
                 break;
         }

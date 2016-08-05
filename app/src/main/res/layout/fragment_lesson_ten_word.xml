@@ -24,13 +24,13 @@
             android:gravity="center_horizontal" >
 
             <ImageButton
-                android:id="@+id/addForLearning"
+                android:id="@+id/examples"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/search14"
-                android:layout_marginLeft="40dp"
+                android:layout_marginStart="40dp"
                 android:contentDescription="@string/description"
-                android:layout_alignParentLeft="true"/>
+                android:layout_alignParentStart="true"/>
 
             <ImageButton
                 android:id="@+id/exercise"

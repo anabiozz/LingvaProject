@@ -139,8 +139,7 @@ public class MainDbForUser{
     public void update(String table, String column, int id){
             dbHelper  = new DbHelper(mContext);
             mDb = dbHelper.getWritableDatabase();
-            String result = "'" +id + "'";
-            String update = "UPDATE "+table+" SET "+column+"=1 WHERE "+ID+"="+result+"";
+            String update = "UPDATE "+table+" SET "+column+"=1 WHERE "+ID+"="+id+"";
             mDb.execSQL(update);
 
     }

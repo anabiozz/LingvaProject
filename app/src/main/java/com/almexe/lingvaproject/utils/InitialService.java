@@ -86,13 +86,15 @@ public class InitialService extends Service{
             else{
                 Tables.setTableMain("defaultuser");
                 mainDbForUser = new MainDbForUser(Application.getContext());
-                if(!mainDbForUser.isExists(Tables.getTableMain())) {
-                    mainDbForUser.createTable(Tables.getTableMain());
-                    mainDbForUser.insert(Tables.getTableMain());
-                    while (mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
-                        for (int i = 0; i < 10; i++) {
-                            int result = mainDbForUser.getNotLearnedWords(i, Tables.getTableMain());
-                            mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
+                synchronized (this){
+                    if(!mainDbForUser.isExists(Tables.getTableMain())) {
+                        mainDbForUser.createTable(Tables.getTableMain());
+                        mainDbForUser.insert(Tables.getTableMain());
+                        while (mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
+                            for (int i = 0; i < 10; i++) {
+                                int result = mainDbForUser.getNotLearnedWords(i, Tables.getTableMain());
+                                mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
+                            }
                         }
                     }
                 }

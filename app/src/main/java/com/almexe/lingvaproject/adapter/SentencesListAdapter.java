@@ -12,31 +12,23 @@ import com.almexe.lingvaproject.R;
 
 import java.util.List;
 
-public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.WordsViewHolder> {
+public class SentencesListAdapter extends RecyclerView.Adapter<SentencesListAdapter.WordsViewHolder>{
 
     private List<String> data;
-    private List<String> nativeData;
-    private SparseBooleanArray selectedItems;
 
-    public WordsListAdapter(List<String> data, List<String> nativeData) {
-        this.data = data;
-        this.nativeData = nativeData;
-    }
-
-    public WordsListAdapter(List<String> data) {
+    public SentencesListAdapter(List<String> data) {
         this.data = data;
     }
 
     @Override
-    public WordsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item, parent, false);
+    public SentencesListAdapter.WordsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_examples, parent, false);
         return new WordsViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(WordsViewHolder holder, int position) {
         holder.title.setText(data.get(position));
-        holder.nativeTitle.setText(nativeData.get(position));
     }
 
     @Override
@@ -47,16 +39,13 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.Word
     public class WordsViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
         TextView title;
-        TextView nativeTitle;
 
         public WordsViewHolder(View itemView) {
             super(itemView);
             itemView.setClickable(true);
-            cardView = (CardView)itemView.findViewById(R.id.cardView);
+            cardView = (CardView)itemView.findViewById(R.id.cardViewExamples);
             title = (TextView)itemView.findViewById(R.id.title);
-            nativeTitle = (TextView)itemView.findViewById(R.id.nativeTitle);
         }
 
     }
-
 }

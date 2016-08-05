@@ -8,47 +8,34 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.almexe.lingvaproject.R;
-import com.almexe.lingvaproject.adapter.WordsListAdapter;
+import com.almexe.lingvaproject.adapter.SentencesListAdapter;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
-import com.almexe.lingvaproject.db.UserDb;
 import com.almexe.lingvaproject.utils.Tables;
 
 import java.util.ArrayList;
 
-public class LearnedWordsFragment extends BaseFragment {
+public class SentencesExamplesFragment extends BaseFragment{
 
     MainDbForUser mainDbForUser;
     MainDb mainDb;
-    private UserDb userDb;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        final View v = inflater.inflate(R.layout.fragment_learned_words, container, false);
-
+        View v = inflater.inflate(R.layout.fragment_sentences_examples, container, false);
         mainDbForUser = new MainDbForUser(getActivity());
         mainDb = new MainDb(getActivity());
-        //userDb = new UserDb(getActivity());
 
         RecyclerView rv = (RecyclerView)v.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rv.setAdapter(new WordsListAdapter(createListData(),createNativeListData()));
+        rv.setAdapter(new SentencesListAdapter(createListData()));
         return v;
     }
 
     private ArrayList<String> createListData() {
         ArrayList<String> data = new ArrayList<>();
         for(int i = 0; i < mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.LEARNED).size(); i++){
-           data.add( mainDb.getWordById(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.LEARNED).get(i)));
-        }
-        return data;
-    }
-
-    private ArrayList<String> createNativeListData() {
-        ArrayList<String> data = new ArrayList<>();
-        for(int i = 0; i < mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.LEARNED).size(); i++){
-            data.add( mainDb.getNativeWordById(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.LEARNED).get(i)));
+            data.add( mainDb.getWordById(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.LEARNED).get(i)));
         }
         return data;
     }

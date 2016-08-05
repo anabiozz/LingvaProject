@@ -11,7 +11,7 @@
     android:layout_marginRight="12dp">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/cardViewExamples"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card:cardElevation="2dp"
@@ -27,22 +27,12 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:textSize="8pt"
                 android:textColor="@color/colorBlack"
                 android:paddingBottom="5dp"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/nativeTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorAccent"/>
-
-            </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

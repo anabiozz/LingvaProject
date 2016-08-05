@@ -26,7 +26,7 @@ import org.ispeech.error.BusyException;
 import org.ispeech.error.InvalidApiKeyException;
 import org.ispeech.error.NoNetworkException;
 
-public class OwnLessonFragment extends AbstractFragment implements OnClickListener{
+public class OwnLessonFragment extends BaseFragment implements OnClickListener{
 
 	ImageButton						deleteWord, voice, menu;
 	public static TextView		    mainDataTextView, countWord, tranlate;
