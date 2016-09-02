@@ -53,6 +53,7 @@ public class Application extends android.app.Application{
     private final static String UPDATE_INFO_MAIN_TEXT_VIEW = "UPDATE_INFO_MAIN_TEXT_VIEW";
     private final static String UPDATE_INFO_TRANSLATE = "UPDATE_INFO_TRANSLATE";
     private final static String UPDATE_INFO_COUNT = "UPDATE_INFO_COUNT";
+    private final static String UPDATE_INFO_WORD_COUNT = "UPDATE_INFO_WORD_COUNT";
 
     public static void saveUpdateInfo(UpdateInfo updateInfo) {
         Context context = Application.getContext();
@@ -61,6 +62,7 @@ public class Application extends android.app.Application{
         editor.putString(UPDATE_INFO_MAIN_TEXT_VIEW, updateInfo.getMainTextView());
         editor.putString(UPDATE_INFO_TRANSLATE, updateInfo.getTranslateText());
         editor.putInt(UPDATE_INFO_COUNT, updateInfo.getCount());
+        editor.putInt(UPDATE_INFO_WORD_COUNT, updateInfo.getWordCount());
         editor.commit();
     }
 
@@ -74,6 +76,7 @@ public class Application extends android.app.Application{
         updateInfo.translateText = prefs.getString(UPDATE_INFO_TRANSLATE,
                 mainDb.getTranslateById(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).get(0)));
         updateInfo.count = prefs.getInt(UPDATE_INFO_COUNT, 1);
+        updateInfo.wordCount = prefs.getInt(UPDATE_INFO_WORD_COUNT, 0);
         return updateInfo;
     }
 

@@ -66,7 +66,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     protected Utils utils;
     protected MainDbForUser mainDbForUser;
     protected MainDb mainDb;
-    protected int wordCount = 0;
+    public int wordCount = 0;
     FragmentManager fragmentManager;
 
     public String mainTextView;
@@ -99,7 +99,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     }
 
 
-    @Override
+   /* @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if(savedInstanceState != null) {
@@ -108,7 +108,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
             translateText = savedInstanceState.getString(Utils.TRANSLATION);
             count = savedInstanceState.getInt(Utils.COUNT);
         }
-    }
+    }*/
 
     /*******************************************************************************************/
     @Override
@@ -139,12 +139,12 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         mainTextView = updateInfo.getMainTextView();
         translateText = updateInfo.getTranslateText();
         count = updateInfo.getCount();
+        wordCount = updateInfo.getWordCount();
 
         /*mainTextView =  mainDb.getWordById(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).get(0));
         translateText = mainDb.getTranslateById(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).get(0));
         CountWords = mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN);*/
         CountWords = 10;
-        wordCount = 0;
         mainDataTextView.setText(mainTextView);
         translate.setText(translateText);
         String resultCountWord = String.format(res.getString(R.string.result_count_word), count, CountWords);
@@ -177,7 +177,12 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     public void onPause() {
         super.onPause();
         Log.e(TAG, "onPause");
-        Application.saveUpdateInfo(new UpdateInfo(new LessonTenWordFragment()));
+        UpdateInfo updateInfo = new UpdateInfo(new LessonTenWordFragment());
+        updateInfo.setMainTextView(mainDataTextView.getText().toString());
+        updateInfo.setTranslateText(translate.getText().toString());
+        updateInfo.setCount(count);
+        updateInfo.setCount(wordCount);
+        Application.saveUpdateInfo(updateInfo);
     }
 
     @Override
@@ -199,9 +204,9 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         Log.e(TAG, "onSaveInstanceState");
-        savedInstanceState.putInt(Utils.COUNT, count);
+        /*savedInstanceState.putInt(Utils.COUNT, count);
         savedInstanceState.putString(Utils.MAIN_TEXT, mainDataTextView.getText().toString());
-        savedInstanceState.putString(Utils.TRANSLATION, translate.getText().toString());
+        savedInstanceState.putString(Utils.TRANSLATION, translate.getText().toString());*/
     }
 
     private String removeUrl(String commentstr)

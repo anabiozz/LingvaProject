@@ -6,14 +6,24 @@ public class UpdateInfo {
     public String mainTextView;
     public String translateText;
     public int count;
+    public int wordCount;
 
     public UpdateInfo(LessonTenWordFragment lessonTenWordFragment) {
         this.mainTextView = lessonTenWordFragment.mainTextView;
         this.translateText = lessonTenWordFragment.translateText;
         this.count = lessonTenWordFragment.count;
+        this.wordCount = lessonTenWordFragment.wordCount;
     }
 
     public UpdateInfo(){}
+
+    public int getWordCount() {
+        return wordCount;
+    }
+
+    public void setWordCount(int wordCount) {
+        this.wordCount = wordCount;
+    }
 
     public String getMainTextView() {
         return mainTextView;
