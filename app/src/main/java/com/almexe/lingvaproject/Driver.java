@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -22,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +63,7 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         utils = new Utils();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -154,7 +157,6 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         Intent it = new Intent(this, InitialService.class);
         bindService(it, mConnection, BIND_AUTO_CREATE);
         Log.e("IRemote", "onStart");
-
     }
 
     @Override
@@ -289,8 +291,10 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         default:
             break;
         }
-        
         if (fragment != null) {
+            Bundle args = new Bundle();
+            args.putInt(Utils.BUNDLE, position);
+            fragment.setArguments(args);
             MenuItem pos = navigationView.getMenu().findItem(position);
             CharSequence title = pos.getTitle();
             setTitle(title);
@@ -298,7 +302,6 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
             Log.e("MainActivity", "Error in creating fragment");
         }
     }
-
     @Override
     public void setTitle(CharSequence title) {
         getSupportActionBar().setTitle(title);

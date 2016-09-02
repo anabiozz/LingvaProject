@@ -17,6 +17,8 @@ import java.io.IOException;
 
 public class InitialService extends Service{
 
+    private static final Object myLock = new Object();
+
     final String LOG_TAG = "myLogs";
     protected String[] scope = new String[]{VKScope.WALL, VKScope.PHOTOS};
     MainDb mainDb;
@@ -48,10 +50,27 @@ public class InitialService extends Service{
 
     @Override
     public IBinder onBind(Intent intent) {
-        DataBase mr = new DataBase();
-        new Thread(mr).start();
-        CreateTable createTable = new CreateTable();
-        new Thread(createTable).start();
+
+        synchronized (myLock) {
+            DataBase mr = new DataBase();
+            Thread t1 = new Thread(mr);
+            t1.start();
+            try {
+                t1.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            CreateTable createTable = new CreateTable();
+            Thread t2 = new Thread(createTable);
+            t2.start();
+            try {
+                t2.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         return localBinder;
     }
 

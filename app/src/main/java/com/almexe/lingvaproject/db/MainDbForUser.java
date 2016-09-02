@@ -40,13 +40,14 @@ public class MainDbForUser{
     public static final String TRANSCRIPTION =  "transcription";
     public static final String NUMBERS =  "mynumbers";
     public static final String DB_NAME =       "MainDbForUser";
+    public static final int    SCHEMA_VERSION = 1;
 
     public static final String MAIN = "main_table";
     public static final String TEN =    "ten_table";
     public static final String OWN =  "own_table";
     public static final String LEARNED =  "learned_table";
 
-    public static final int    SCHEMA_VERSION = 1;
+
     public static boolean rowExists = false;
     public String table;
     Cursor cursor;

@@ -26,13 +26,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.almexe.lingvaproject.Application;
 import com.almexe.lingvaproject.Driver;
 import com.almexe.lingvaproject.R;
+import com.almexe.lingvaproject.db.ExamplesDb;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
-import com.almexe.lingvaproject.utils.CallBack;
 import com.almexe.lingvaproject.utils.Constants;
+import com.almexe.lingvaproject.utils.ParseUrl;
 import com.almexe.lingvaproject.utils.Tables;
+import com.almexe.lingvaproject.utils.UpdateInfo;
 import com.almexe.lingvaproject.utils.Utils;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -52,29 +55,33 @@ import java.util.regex.Pattern;
 public class LessonTenWordFragment extends Fragment implements OnClickListener {
 
     protected ImageButton  examples;
-    protected TextView mainDataTextView;
-    protected TextView translate;
+    public TextView mainDataTextView;
+    public TextView translate;
     protected TextView countWord;
     protected SpeechSynthesis synthesis;
     protected  String wordFromTextView;
-    protected SharedPreferences sharedpreferences;
     protected long lastCheckedMillis;
     protected long now;
-    protected int count = 1;
+    public int count = 1;
     protected Utils utils;
     protected MainDbForUser mainDbForUser;
     protected MainDb mainDb;
     protected int wordCount = 0;
     FragmentManager fragmentManager;
 
-    public static final String MyPREFERENCES = "MyPrefs" ;
+    public String mainTextView;
+    public String translateText;
+    protected int CountWords;
+
     public static final String TAG = "LessonTenWordFragment";
     private TextView twitts;
 
+    protected ExamplesDb examplesDb;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(TAG, "onCreate");
         utils = new Utils();
         mainDbForUser = new MainDbForUser(getActivity());
         mainDb = new MainDb(getActivity());
@@ -88,8 +95,19 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         /***************************************************/
         fragmentManager = getFragmentManager();
 
-        /*Login/Logout Button*/
-        //Vkloginlogout();
+        examplesDb = new ExamplesDb(getActivity());
+    }
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState != null) {
+            Log.e(TAG, "savedInstanceState != null");
+            mainTextView = savedInstanceState.getString(Utils.MAIN_TEXT);
+            translateText = savedInstanceState.getString(Utils.TRANSLATION);
+            count = savedInstanceState.getInt(Utils.COUNT);
+        }
     }
 
     /*******************************************************************************************/
@@ -114,19 +132,35 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         mainDataTextView.setOnClickListener(this);
         examples.setOnClickListener(this);
         fab.setOnClickListener(this);
-
         Log.e(TAG, "onCreateView");
+
+        UpdateInfo updateInfo = Application.getUpdateInfo(getActivity());
+
+        mainTextView = updateInfo.getMainTextView();
+        translateText = updateInfo.getTranslateText();
+        count = updateInfo.getCount();
+
+        /*mainTextView =  mainDb.getWordById(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).get(0));
+        translateText = mainDb.getTranslateById(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).get(0));
+        CountWords = mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN);*/
+        CountWords = 10;
         wordCount = 0;
-        mainDataTextView.setText(mainDb.getWordById(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).get(0)));
-        translate.setText(mainDb.getTranslateById(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN).get(0)));
-        String resultCountWord = String.format(res.getString(R.string.result_count_word), count,
-                mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN));
+        mainDataTextView.setText(mainTextView);
+        translate.setText(translateText);
+        String resultCountWord = String.format(res.getString(R.string.result_count_word), count, CountWords);
         countWord.setText(resultCountWord);
 
         Log.e(TAG, String.valueOf(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.TEN)));
         font();
 
-        getTweet();
+        //getTweet();
+
+        if(!examplesDb.isRowExists(mainDataTextView.getText().toString())) {
+            new ParseUrl().execute(mainDataTextView.getText().toString());
+            //twitts.setText(examplesDb.getWord(0, 2));
+        }
+
+        Log.e(TAG, String.valueOf(examplesDb.fetchPlacesCount(mainDataTextView.getText().toString())));
 
         mainDataTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -135,9 +169,41 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
             }
         });
 
-
         return v;
     }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e(TAG, "onPause");
+        Application.saveUpdateInfo(new UpdateInfo(new LessonTenWordFragment()));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Application.getUpdateInfo();
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
+
+        float fSize = Float.parseFloat(prefs.getString(
+                getString(R.string.pref_size), "30"));
+
+        if(fSize > 30) fSize = 30;
+
+        mainDataTextView.setTextSize(fSize);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.e(TAG, "onSaveInstanceState");
+        savedInstanceState.putInt(Utils.COUNT, count);
+        savedInstanceState.putString(Utils.MAIN_TEXT, mainDataTextView.getText().toString());
+        savedInstanceState.putString(Utils.TRANSLATION, translate.getText().toString());
+    }
+
     private String removeUrl(String commentstr)
     {
         String urlPattern = "((https?|ftp|gopher|telnet|file|Unsure|http):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
@@ -177,9 +243,6 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         return commentstr;
     }
 
-
-
-
     public void getTweet() {
         final SearchTimeline searchTimeline = new SearchTimeline.Builder()
                 .query(mainDataTextView.getText().toString())
@@ -205,7 +268,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     }
 
     /*******************************************************************************************/
-    private void toChangeWords(){
+    private void toChangeWords() {
         now = System.currentTimeMillis();
         lastCheckedMillis = getPreference(getActivity(), Tables.getTableMain());
         Log.e(TAG, String.valueOf(lastCheckedMillis) + " lastCheckedMillis");
@@ -221,24 +284,24 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
             }
         }
     }
-    /**************************************************************************************/
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putInt("count", count);
-        savedInstanceState.putString("maintext", mainDbForUser.readNowForegin(Tables.getTableMain()));
-        savedInstanceState.putString("trans", mainDbForUser.readNowTrans(Tables.getTableMain()));
-    }
+
     /****************************************************************************************/
     public void setPreference(Context c, long value, String key) {
-        sharedpreferences = c.getSharedPreferences(MyPREFERENCES, 0);
+        SharedPreferences sharedpreferences = c.getSharedPreferences(Utils.MyPREFERENCES, 0);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putLong(key, value);
         editor.apply();
     }
 
+    public void setPreference(Context c, String value, String key) {
+        SharedPreferences sharedpreferences = c.getSharedPreferences(Utils.MyPREFERENCES, 0);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(Utils.BUNDLE, mainDataTextView.getText().toString());
+        editor.apply();
+    }
+
     public long getPreference(Context c, String key) {
-        sharedpreferences = c.getSharedPreferences(MyPREFERENCES, 0);
+        SharedPreferences sharedpreferences = c.getSharedPreferences(Utils.MyPREFERENCES, 0);
         return sharedpreferences.getLong(key, 0);
     }
     /*************************************************************************************/
@@ -274,7 +337,6 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                     return super.onSingleTapConfirmed(e);
                 }
 
-
                 @Override
                 public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                                        float velocityY) {
@@ -296,7 +358,10 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                                     MainDbForUser.TEN).get(wordCount)));
                             countWord.setText(++count + "/" + mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN));
                         }
-                        getTweet();
+                        if(!examplesDb.isRowExists(mainDataTextView.getText().toString())) {
+                            new ParseUrl().execute(mainDataTextView.getText().toString());
+                        }
+                        //getTweet();
                     }
 
                     // Swipe right (previous)
@@ -317,7 +382,10 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                                     MainDbForUser.TEN).get(wordCount)));
                             countWord.setText(--count + "/" + mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN));
                         }
-                        getTweet();
+                        if(!examplesDb.isRowExists(mainDataTextView.getText().toString())) {
+                            new ParseUrl().execute(mainDataTextView.getText().toString());
+                        }
+                        //getTweet();
                     }
                     return true;
                 }
@@ -332,20 +400,6 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         countWord.setTypeface(mainFont);
     }
     /***************************************************************************************/
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
-
-        float fSize = Float.parseFloat(prefs.getString(
-                getString(R.string.pref_size), "30"));
-
-        if(fSize > 30) fSize = 30;
-
-        mainDataTextView.setTextSize(fSize);
-    }
 
     class UpdateLearn extends AsyncTask<Void, Void, Void> {
 
@@ -362,11 +416,6 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
             super.onPostExecute(aVoid);
             new ChangeWords().execute();
         }
-    }
-
-    public void register(CallBack callBack) {
-        mainDbForUser = new MainDbForUser(getActivity());
-        callBack.setNumberLearnedWords(String.valueOf(mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.LEARNED)));
     }
 
     class ChangeWords extends AsyncTask<Void, Void, Void> {
@@ -429,6 +478,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                 break;
 
             case R.id.examples:
+                setPreference(getActivity(), mainDataTextView.getText().toString(), Utils.BUNDLE);
                 utils.transactionsWithAnimation(getFragmentManager(), new SentencesExamplesFragment(), Utils.EXAMPLES_SENTENCES_FRAGMENT);
                 break;
         }

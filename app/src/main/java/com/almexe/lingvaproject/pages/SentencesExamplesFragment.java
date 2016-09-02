@@ -1,9 +1,13 @@
 package com.almexe.lingvaproject.pages;
 
+import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +15,11 @@ import android.view.ViewGroup;
 
 import com.almexe.lingvaproject.R;
 import com.almexe.lingvaproject.adapter.SentencesListAdapter;
+import com.almexe.lingvaproject.db.ExamplesDb;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
 import com.almexe.lingvaproject.utils.Tables;
+import com.almexe.lingvaproject.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -22,11 +28,18 @@ public class SentencesExamplesFragment extends BaseFragment{
     MainDbForUser mainDbForUser;
     MainDb mainDb;
 
+    protected ExamplesDb examplesDb;
+
+    public String getPreference(Context c, String key) {
+        SharedPreferences sharedpreferences = c.getSharedPreferences(Utils.MyPREFERENCES, 0);
+        return sharedpreferences.getString(Utils.BUNDLE, "");
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_sentences_examples, container, false);
         mainDbForUser = new MainDbForUser(getActivity());
         mainDb = new MainDb(getActivity());
+        examplesDb = new ExamplesDb(getActivity());
 
         RecyclerView rv = (RecyclerView)v.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -35,8 +48,7 @@ public class SentencesExamplesFragment extends BaseFragment{
         if(getView() != null) {
             getView().setFocusableInTouchMode(true);
             getView().requestFocus();
-            getView().setOnKeyListener( new View.OnKeyListener()
-            {
+            getView().setOnKeyListener( new View.OnKeyListener() {
                 @Override
                 public boolean onKey( View v, int keyCode, KeyEvent event )
                 {
@@ -54,8 +66,8 @@ public class SentencesExamplesFragment extends BaseFragment{
 
     private ArrayList<String> createListData() {
         ArrayList<String> data = new ArrayList<>();
-        for(int i = 0; i < mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.LEARNED).size(); i++){
-            data.add( mainDb.getWordById(mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.LEARNED).get(i)));
+        for(int i = 0; i < examplesDb.fetchPlacesCount(getPreference(getActivity(), Utils.BUNDLE)); i++){
+            data.add(examplesDb.getWord(getPreference(getActivity(), Utils.BUNDLE), i));
         }
         return data;
     }
