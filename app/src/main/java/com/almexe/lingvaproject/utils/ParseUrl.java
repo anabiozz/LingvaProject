@@ -1,7 +1,6 @@
 package com.almexe.lingvaproject.utils;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.almexe.lingvaproject.Application;
 import com.almexe.lingvaproject.db.ExamplesDb;
@@ -15,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Arrays;
 
 public class ParseUrl extends AsyncTask<String, Void, String> {
 
@@ -42,7 +40,7 @@ public class ParseUrl extends AsyncTask<String, Void, String> {
             StringBuilder sb = new StringBuilder();
             while ((line = br.readLine()) != null) {
                 sb.append(line);
-                Log.e(TAG, line);
+                //Log.e(TAG, line);
             }
             Document doc = Jsoup.parse(sb.toString());
             Elements els = doc.select("div.li_content");

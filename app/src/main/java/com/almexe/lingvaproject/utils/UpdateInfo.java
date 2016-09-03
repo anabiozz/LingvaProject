@@ -9,8 +9,8 @@ public class UpdateInfo {
     public int wordCount;
 
     public UpdateInfo(LessonTenWordFragment lessonTenWordFragment) {
-        this.mainTextView = lessonTenWordFragment.mainTextView;
-        this.translateText = lessonTenWordFragment.translateText;
+        this.mainTextView = lessonTenWordFragment.mainDataTextView.getText().toString();
+        this.translateText = lessonTenWordFragment.translate.getText().toString();
         this.count = lessonTenWordFragment.count;
         this.wordCount = lessonTenWordFragment.wordCount;
     }

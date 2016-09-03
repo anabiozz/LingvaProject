@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteStatement;
 
 import java.util.ArrayList;
 
@@ -69,11 +68,21 @@ public class ExamplesDb {
         mDb.close();
     }
 
-    public String getWord(String word, int position){
+    public String getWords(String word, int position){
         mDb = dbHelper.getReadableDatabase();
         String result;
         cursor = mDb.rawQuery("SELECT "+EXAMPLE+" FROM " + TABLE + " WHERE " + WORD +" =?", new String[]{word});
         cursor.moveToPosition(position);
+        result = cursor.getString(0);
+        cursor.close();
+        return result;
+    }
+
+    public String getWord(String word){
+        mDb = dbHelper.getReadableDatabase();
+        String result;
+        cursor = mDb.rawQuery("SELECT "+EXAMPLE+" FROM " + TABLE + " WHERE " + WORD +" =?", new String[]{word});
+        cursor.moveToPosition(0);
         result = cursor.getString(0);
         cursor.close();
         return result;
