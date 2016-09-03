@@ -1,13 +1,10 @@
 package com.almexe.lingvaproject.pages;
 
-import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +15,6 @@ import com.almexe.lingvaproject.adapter.SentencesListAdapter;
 import com.almexe.lingvaproject.db.ExamplesDb;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
-import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
 
 import java.util.ArrayList;
@@ -61,13 +57,18 @@ public class SentencesExamplesFragment extends BaseFragment{
                 }
             } );
         }
+
+
+
         return v;
     }
+
+
 
     private ArrayList<String> createListData() {
         ArrayList<String> data = new ArrayList<>();
         for(int i = 0; i < examplesDb.fetchPlacesCount(getPreference(getActivity(), Utils.BUNDLE)); i++){
-            data.add(examplesDb.getWord(getPreference(getActivity(), Utils.BUNDLE), i));
+            data.add(examplesDb.getWords(getPreference(getActivity(), Utils.BUNDLE), i));
         }
         return data;
     }
