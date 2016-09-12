@@ -64,12 +64,11 @@ public class AddOwnWordsFragment extends BaseFragment implements OnClickListener
 
 
     private void AutoCompleteTextView() {
-
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,
                 mainDb.notSortedListForForeignWords);
 
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,
-                mainDb.notSortedListForNativWords);
+                mainDb.notSortedListForNativeWords);
 
         foreignWordEditText.setAdapter(adapter);
         nativWordEditText.setAdapter(adapter2);

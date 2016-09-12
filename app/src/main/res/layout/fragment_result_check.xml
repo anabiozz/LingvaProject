@@ -53,11 +53,8 @@
             android:id="@+id/resultbutton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
             android:text="@string/addForLearning"
-            android:gravity="center"
-            android:theme="@style/Button"
-            android:textColor="@color/colorTextPrimaryLight"/>
+            style="@style/button"/>
     </LinearLayout>
 
 

@@ -22,22 +22,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        android:background="@color/colorAccent"
-        android:gravity="center"
-        android:padding="12dp"
         android:text="@string/learn_word"
-        android:textColor="@color/colorTextPrimaryLight"
-        android:textSize="20sp" />
+        style="@style/button" />
 
     <Button
         android:id="@+id/dontLearnDialogBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:gravity="center"
-        android:padding="12dp"
         android:text="@string/dontlearn_word"
-        android:textColor="@color/colorTextPrimaryLight"
-        android:textSize="20sp" />
+        style="@style/button" />
 
 </LinearLayout>

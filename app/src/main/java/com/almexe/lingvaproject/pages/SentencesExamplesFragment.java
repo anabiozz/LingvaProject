@@ -57,13 +57,8 @@ public class SentencesExamplesFragment extends BaseFragment{
                 }
             } );
         }
-
-
-
         return v;
     }
-
-
 
     private ArrayList<String> createListData() {
         ArrayList<String> data = new ArrayList<>();

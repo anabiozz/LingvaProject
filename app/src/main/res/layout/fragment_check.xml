@@ -105,15 +105,10 @@
 
                 <Button
                     android:id="@+id/btnCheck"
-                    android:height="90dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorAccent"
                     android:text="@string/proseed"
-                    android:gravity="center"
-                    android:textColor="@color/colorTextPrimaryLight"
-                    android:padding="12dp"
-                    android:textSize="20sp" />
+                    style="@style/button" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

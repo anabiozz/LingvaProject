@@ -1,6 +1,5 @@
 package com.almexe.lingvaproject.db;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -17,13 +16,11 @@ import java.util.List;
 
 public class MainDb extends SQLiteOpenHelper {
 
-    private static String DB_PATH = "/data/data/ru.lingva/databases/";
+    private static String DB_PATH;
     private static String DB_NAME = "MainDb";
     private SQLiteDatabase myDataBase;
     private final Context mContext;
-    static Context context;
     MainDb helper;
-    public static boolean rowExists = false;
 
     public static final String FOREGIN_WORD = "foregin_words";
     public static final String NATIV_WORD = "nativ_words";
@@ -32,32 +29,23 @@ public class MainDb extends SQLiteOpenHelper {
     public static final String ID = "_id";
 
     Cursor cursor;
-
-    public int icount = 0;
-
     public List<String> notSortedListForForeignWords = new ArrayList<>();
-    public List<String> notSortedListForNativWords = new ArrayList<>();
+    public List<String> notSortedListForNativeWords = new ArrayList<>();
     public List<String> transArray = new ArrayList<>();
-
-    public String foreginWord, nativWord;
 
     public MainDb(Context context) {
         super(context, DB_NAME, null, 1);
         if(android.os.Build.VERSION.SDK_INT >= 4.2) {
             DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
         } else {
-            DB_PATH = "/data/data/" + context.getPackageName() + "/databases/";
+            DB_PATH = context.getFilesDir().getPath() + context.getPackageName() + "/databases/";
         }
         this.mContext = context;
     }
 
     public void createDataBase() throws IOException {
         boolean dbExist = checkDataBase();
-
-        if(dbExist) {
-            //do nothing
-        } else {
-            //copy database
+        if(!dbExist) {
             this.getReadableDatabase();
             try {
                 copyDataBase();
@@ -84,14 +72,12 @@ public class MainDb extends SQLiteOpenHelper {
         while ((length = myInput.read(buffer)) > 0) {
             myOutput.write(buffer, 0, length);
         }
-
         myOutput.flush();
         myOutput.close();
         myInput.close();
     }
 
     public void openDataBase() throws SQLException {
-//
         String myPath = DB_PATH + DB_NAME;
         myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
     }
@@ -111,36 +97,20 @@ public class MainDb extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
-    public void write() {
-        helper = new MainDb(mContext);
-        myDataBase = helper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(FOREGIN_WORD, foreginWord);
-        values.put(NATIV_WORD, nativWord);
-        myDataBase.insert(TABLE, null, values);
-        myDataBase.close();
-    }
-
     public void read() {
         String selectQuery = "SELECT * FROM " + TABLE;
         helper = new MainDb(mContext);
         myDataBase = helper.getReadableDatabase();
         Cursor cursor = myDataBase.rawQuery(selectQuery, null);
-
         if(cursor.moveToFirst()) {
             do {
                 String trans = cursor.getString(1);
-                String foregin_word = cursor.getString(2);
-                String nativ_word = cursor.getString(3);
-
-                notSortedListForForeignWords.add(foregin_word);
-                notSortedListForNativWords.add(nativ_word);
+                String foreign_word = cursor.getString(2);
+                String native_word = cursor.getString(3);
+                notSortedListForForeignWords.add(foreign_word);
+                notSortedListForNativeWords.add(native_word);
                 transArray.add(trans);
-                rowExists = true;
-
             } while (cursor.moveToNext());
-        } else {
-            rowExists = false;
         }
         cursor.close();
         myDataBase.close();
@@ -335,9 +305,6 @@ public class MainDb extends SQLiteOpenHelper {
                 }
 
             } while (cursor.moveToNext());
-            rowExists = true;
-        } else {
-            rowExists = false;
         }
         cursor.close();
         myDataBase.close();
@@ -399,16 +366,5 @@ public class MainDb extends SQLiteOpenHelper {
         cursor.close();
         myDataBase.close();
         return list;
-    }
-
-    public boolean isEmpty() {
-        boolean empty = true;
-        Cursor cur = myDataBase.rawQuery("SELECT COUNT(*) FROM YOURTABLE", null);
-        if(cur != null && cur.moveToFirst()) {
-            empty = (cur.getInt(0) == 0);
-        }
-        cur.close();
-
-        return empty;
     }
 }

@@ -11,7 +11,6 @@ import com.almexe.lingvaproject.R;
 import com.almexe.lingvaproject.adapter.WordsListAdapter;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
-import com.almexe.lingvaproject.db.UserDb;
 import com.almexe.lingvaproject.utils.Tables;
 
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ public class LearnedWordsFragment extends BaseFragment {
 
     MainDbForUser mainDbForUser;
     MainDb mainDb;
-    private UserDb userDb;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

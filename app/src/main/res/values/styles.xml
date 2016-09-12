@@ -33,11 +33,15 @@
         <item name="android:orientation">vertical</item>
     </style>
 
-    <style name="Button" parent="Base.Widget.AppCompat.Button">
+    <style name="button" parent="Base.Widget.AppCompat.Button">
+        <item name="android:textColor">@color/colorTextPrimaryLight</item>
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:height">60dp</item>
+        <item name="android:gravity">center</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">70dp</item>
         <item name="android:layout_marginBottom">20dp</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">19sp</item>
         <item name="android:padding">20dp</item>
     </style>
 

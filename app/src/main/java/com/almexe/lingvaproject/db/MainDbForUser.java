@@ -2,7 +2,6 @@ package com.almexe.lingvaproject.db;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -10,13 +9,9 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.almexe.lingvaproject.Application;
-import com.almexe.lingvaproject.R;
-import com.almexe.lingvaproject.utils.Tables;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class MainDbForUser{
 
@@ -47,14 +42,12 @@ public class MainDbForUser{
     public static final String OWN =  "own_table";
     public static final String LEARNED =  "learned_table";
 
-
-    public static boolean rowExists = false;
     public String table;
     Cursor cursor;
     public int icount = 0;
-    public String          foreginTenWords, nativTenWords, transTenWords;
+    public String          foreignTenWords, nativeTenWords, transTenWords;
 
-    public String          foreginWord, nativWord, transcription;
+    public String          foreignWord, nativeWord, transcription;
 
     public List<String> notSortedListForForeignWords = new ArrayList<>();
 
@@ -83,30 +76,6 @@ public class MainDbForUser{
     public MainDbForUser(Context context) {
         mContext = context;
     }
-
-    /*public void copy(){
-        String selectQuery2 = "SELECT * FROM words WHERE _id BETWEEN 0 AND 2000";
-        MainDb mainDb = new MainDb(mContext);
-        mDb = mainDb.getReadableDatabase();
-        Cursor cursor = mDb.rawQuery(selectQuery2, null);
-        if(cursor.moveToFirst()) {
-            do{
-                String trans = cursor.getString(1);
-                String foregin_word = cursor.getString(2);
-                String nativ_word = cursor.getString(3);
-
-                notSortedListForForeignWords.add(foregin_word);
-                notSortedListForNativWords.add(nativ_word);
-                transArray.add(trans);
-
-            }while(cursor.moveToNext());
-            rowExists = true;
-        }else{
-            rowExists = false;
-        }
-
-        cursor.close();
-    }*/
 
     public void createTable(String table){
         this.table = table;
@@ -173,8 +142,8 @@ public class MainDbForUser{
         dbHelper = new DbHelper(mContext);
         mDb = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(FOREGIN_WORD, foreginWord);
-        values.put(NATIV_WORD, nativWord);
+        values.put(FOREGIN_WORD, foreignWord);
+        values.put(NATIV_WORD, nativeWord);
         values.put(TRANSCRIPTION, transcription);
         mDb.insert(table, null, values);
         mDb.close();
@@ -217,10 +186,7 @@ public class MainDbForUser{
             do{
                 String number = cursor.getString(1);
                 notSortedListForForeignWords.add(number);
-                rowExists = true;
             }while(cursor.moveToNext());
-        }else{
-            rowExists = false;
         }
         cursor.close();
         mDb.close();
@@ -289,9 +255,6 @@ public class MainDbForUser{
                 notSortedListForNativ10Words.add(nativ_word10);
 
             }while(cursor.moveToNext());
-            rowExists = true;
-        }else{
-            rowExists = false;
         }
         cursor.close();
     }
@@ -300,8 +263,8 @@ public class MainDbForUser{
         dbHelper = new DbHelper(mContext);
         mDb = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(FOREGIN_WORD, foreginTenWords);
-        values.put(NATIV_WORD, nativTenWords);
+        values.put(FOREGIN_WORD, foreignTenWords);
+        values.put(NATIV_WORD, nativeTenWords);
         values.put(TRANSCRIPTION, transTenWords);
         mDb.insert(table, null, values);
         mDb.close();
@@ -484,9 +447,6 @@ public class MainDbForUser{
                 }
 
             }while(cursor.moveToNext());
-            rowExists = true;
-        }else{
-            rowExists = false;
         }
         cursor.close();
         mDb.close();

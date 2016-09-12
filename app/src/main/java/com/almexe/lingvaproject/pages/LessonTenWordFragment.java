@@ -67,7 +67,6 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     public String translateText;
 
     public static final String TAG = "LessonTenWordFragment";
-
     protected ExamplesDb examplesDb;
 
     @Override
@@ -77,6 +76,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         utils = new Utils();
         mainDbForUser = new MainDbForUser(getActivity());
         mainDb = new MainDb(getActivity());
+        examplesDb = new ExamplesDb(getActivity());
         /***************************************************/
         /*method change lesson words*/
         toChangeWords();
@@ -86,8 +86,6 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         synthesis.setStreamType(AudioManager.STREAM_MUSIC);
         /***************************************************/
         fragmentManager = getFragmentManager();
-
-        examplesDb = new ExamplesDb(getActivity());
     }
 
     /*******************************************************************************************/
@@ -98,9 +96,8 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         View v = inflater.inflate(R.layout.fragment_lesson_ten_word, container, false);
         Resources res = getResources();
         mainDataTextView = (TextView)v.findViewById(R.id.mainOwnDataTextView);
-
-        translate =         (TextView)v.findViewById(R.id.translat);
-        countWord =         (TextView)v.findViewById(R.id.countWord);
+        translate = (TextView)v.findViewById(R.id.translat);
+        countWord = (TextView)v.findViewById(R.id.countWord);
         ImageButton exerciseButton = (ImageButton) v.findViewById(R.id.exercise);
         ImageButton voiceButton = (ImageButton) v.findViewById(R.id.voice);
         examples = (ImageButton)v.findViewById(R.id.examples);

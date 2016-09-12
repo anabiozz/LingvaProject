@@ -71,25 +71,13 @@
             android:id="@+id/button_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:padding="12dp"
-            android:height="90dp"
-            android:gravity="center"
-            android:background="@color/colorAccent"
             android:text="@string/button_add"
-            android:textColor="@color/colorTextPrimaryLight"
-            android:textSize="20sp" />
-
+            style="@style/button"/>
         <Button
             android:id="@+id/proseedToLesson"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
             android:text="@string/proseedToLesson"
-            android:height="90dp"
-            android:gravity="center"
-            android:textColor="@color/colorTextPrimaryLight"
-            android:padding="12dp"
-            android:textSize="20sp" />
+            style="@style/button"/>
     </LinearLayout>
 </LinearLayout>

@@ -19,7 +19,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="@string/menu"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
 
         <Button
             android:id="@+id/addForLearning"
@@ -27,7 +27,7 @@
             android:layout_height="50dp"
             android:layout_weight="2"
             android:text="@string/addForLearning"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
 
         <Button
             android:id="@+id/voice"
@@ -35,7 +35,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="@string/voice"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -46,7 +46,7 @@
         <TextView
             android:id="@+id/mainDataTextView"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="0dp"
             android:layout_marginTop="40dp"
             android:layout_weight="3"
             android:gravity="center_horizontal"
@@ -54,7 +54,6 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#000000"
             android:textSize="45sp" />
-z
 
         <TextView
             android:id="@+id/translat"

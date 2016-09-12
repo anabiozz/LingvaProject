@@ -1,5 +1,6 @@
 package com.almexe.lingvaproject.pages;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.media.AudioManager;
@@ -15,9 +16,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.almexe.lingvaproject.R;
+import com.almexe.lingvaproject.db.ExamplesDb;
 import com.almexe.lingvaproject.db.MainDb;
 import com.almexe.lingvaproject.db.MainDbForUser;
 import com.almexe.lingvaproject.utils.Constants;
+import com.almexe.lingvaproject.utils.ParseUrl;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
 
@@ -28,15 +31,15 @@ import org.ispeech.error.NoNetworkException;
 
 public class OwnLessonFragment extends BaseFragment implements OnClickListener{
 
-	ImageButton						deleteWord, voice, menu;
-	public static TextView		    mainDataTextView, countWord, tranlate;
-	private static final String 	KEY_INDEX = "index";
-	String wordsFromTextView = null;
-	SpeechSynthesis  synthesis;
-	int count = 1;
-	Utils utils;
-	MainDb mainDb;
-	static int wordCount = 0;
+	protected ImageButton deleteWord, voice, menu;
+    protected static TextView mainDataTextView, countWord, tranlate;
+    protected static final String 	KEY_INDEX = "index";
+    protected SpeechSynthesis  synthesis;
+    protected int count = 1;
+    protected Utils utils;
+    protected MainDb mainDb;
+    protected int wordCount = 0;
+    protected ExamplesDb examplesDb;
 
 	MainDbForUser mainDbForUser;
 
@@ -46,10 +49,10 @@ public class OwnLessonFragment extends BaseFragment implements OnClickListener{
 
 		prepareTTSEngine();
 		synthesis.setStreamType(AudioManager.STREAM_MUSIC);
-		mainDbForUser = new MainDbForUser(getActivity());;
+		mainDbForUser = new MainDbForUser(getActivity());
 		utils = new Utils();
 		mainDb = new MainDb(getActivity());
-	//	userDb = new UserDb(getActivity());
+        examplesDb = new ExamplesDb(getActivity());
 	}
 
 
@@ -94,6 +97,7 @@ public class OwnLessonFragment extends BaseFragment implements OnClickListener{
 		voice.setOnClickListener(this);
 		mainDataTextView.setOnClickListener(this);
 
+        parseExamples();
 		return v;
 	}
 
@@ -151,6 +155,7 @@ public class OwnLessonFragment extends BaseFragment implements OnClickListener{
 									MainDbForUser.OWN).get(wordCount)));
 							countWord.setText(++count + "/" + mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.OWN));
 						}
+                        parseExamples();
 					}
 					// Swipe right (previous)
 					if (e1.getX() < e2.getX()) {
@@ -170,6 +175,7 @@ public class OwnLessonFragment extends BaseFragment implements OnClickListener{
 									MainDbForUser.OWN).get(wordCount)));
 							countWord.setText(--count + "/" + mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.OWN));
 						}
+                        parseExamples();
 					}
 					return true;
 				}
@@ -277,18 +283,33 @@ public class OwnLessonFragment extends BaseFragment implements OnClickListener{
 					e1.printStackTrace();
 				}
 				break;
+
+			case R.id.exercise:
+                setPreference(getActivity(), mainDataTextView.getText().toString(), Utils.BUNDLE);
+                utils.transactionsWithAnimation(getFragmentManager(), new SentencesExamplesFragment(), Utils.EXAMPLES_SENTENCES_FRAGMENT);
+				break;
 		}
 	}
+
+    public void setPreference(Context c, String value, String key) {
+        SharedPreferences sharedpreferences = c.getSharedPreferences(Utils.MyPREFERENCES, 0);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(Utils.BUNDLE, mainDataTextView.getText().toString());
+        editor.apply();
+    }
 
 	private void deleteFromList() {
 		mainDbForUser.getListId(Tables.getTableMain(), MainDbForUser.OWN)
                 .remove(mainDbForUser.getListId(Tables.getTableMain(),MainDbForUser.OWN).get(wordCount));
 	}
 
-	private void updateToZiro(){
-		if(mainDb.getForeinWordById(mainDbForUser.getListId(Tables.getTableMain(),MainDbForUser.OWN).get(0)).equals(wordsFromTextView))
-			mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(wordsFromTextView));
-		else
-			mainDbForUser.updateToNull(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordsFromTextView));
-	}
+    public void parseExamples() {
+        if(!examplesDb.isRowExists(mainDataTextView.getText().toString()))
+            new ParseUrl().execute(mainDataTextView.getText().toString());
+        /*else {
+            String one = findWord(examplesDb.getWord(mainDataTextView.getText().toString())).get(0);
+            String two = "<font color='#ffffff'>"+findWord(examplesDb.getWord(mainDataTextView.getText().toString())).get(1)+"</font>";
+            String three = findWord(examplesDb.getWord(mainDataTextView.getText().toString())).get(2);
+        }*/
+    }
 }

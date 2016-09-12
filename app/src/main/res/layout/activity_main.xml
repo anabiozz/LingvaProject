@@ -16,7 +16,6 @@
         android:layout_height="match_parent">
 
         <android.support.v7.widget.Toolbar
-
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_height="@dimen/abc_action_bar_default_height_material"
@@ -25,7 +24,6 @@
             android:minHeight="?attr/actionBarSize"
             app:theme="@style/ThemeOverlay.AppCompat.Dark"
             android:background="@color/colorPrimary">
-
         </android.support.v7.widget.Toolbar>
 
         <FrameLayout
