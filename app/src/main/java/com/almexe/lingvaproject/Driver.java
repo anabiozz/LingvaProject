@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -23,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,12 +31,10 @@ import com.almexe.lingvaproject.pages.LearnedWordsFragment;
 import com.almexe.lingvaproject.pages.LessonTenWordFragment;
 import com.almexe.lingvaproject.pages.OwnLessonFragment;
 import com.almexe.lingvaproject.pages.Settings;
-import com.almexe.lingvaproject.pages.StartFragment;
 import com.almexe.lingvaproject.utils.Constants;
 import com.almexe.lingvaproject.utils.CustomTypefaceSpan;
 import com.almexe.lingvaproject.utils.InitialService;
 import com.almexe.lingvaproject.utils.Utils;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
@@ -105,10 +101,6 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
         View headerView = navigationView.inflateHeaderView(R.layout.drawer_header);
-
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setNavigationBarTintEnabled(true);
 
         ImageView image = (ImageView) headerView.findViewById(R.id.headerImageView);
         TextView headerName = (TextView) headerView.findViewById(R.id.headerName);

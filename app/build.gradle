@@ -37,7 +37,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:24.1.0'
     compile 'com.android.support:design:24.1.0'
-    compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile 'com.vk:androidsdk:+'
     compile 'org.jsoup:jsoup:1.8.1'
     compile 'com.squareup.picasso:picasso:2.5.2'

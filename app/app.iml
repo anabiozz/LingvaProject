@@ -125,15 +125,14 @@
     <orderEntry type="library" exported="" name="twitter-1.14.1" level="project" />
     <orderEntry type="library" exported="" name="cardview-v7-24.1.0" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-24.1.0" level="project" />
-    <orderEntry type="library" exported="" name="systembartint-1.0.3" level="project" />
     <orderEntry type="library" exported="" name="animated-vector-drawable-24.1.0" level="project" />
     <orderEntry type="library" exported="" name="tweet-composer-1.0.5" level="project" />
     <orderEntry type="library" exported="" name="tweet-ui-1.11.1" level="project" />
     <orderEntry type="library" exported="" name="twitter-text-1.13.0" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-24.1.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-24.1.0" level="project" />
-    <orderEntry type="library" exported="" name="retrofit-1.8.0" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-24.1.0" level="project" />
     <orderEntry type="library" exported="" name="picasso-2.5.2" level="project" />
+    <orderEntry type="library" exported="" name="retrofit-1.8.0" level="project" />
     <orderEntry type="library" exported="" name="iSpeech-SDK-1.5" level="project" />
     <orderEntry type="library" exported="" name="androidsdk-1.6.7" level="project" />
     <orderEntry type="library" exported="" name="twitter-core-1.7.0" level="project" />

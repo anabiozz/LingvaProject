@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.text.Html;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -38,12 +37,6 @@ import com.almexe.lingvaproject.utils.ParseUrl;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.UpdateInfo;
 import com.almexe.lingvaproject.utils.Utils;
-import com.twitter.sdk.android.core.Callback;
-import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.models.Tweet;
-import com.twitter.sdk.android.tweetui.SearchTimeline;
-import com.twitter.sdk.android.tweetui.TimelineResult;
 
 import org.ispeech.SpeechSynthesis;
 import org.ispeech.error.BusyException;
@@ -53,8 +46,6 @@ import org.ispeech.error.NoNetworkException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class LessonTenWordFragment extends Fragment implements OnClickListener {
 
@@ -72,12 +63,10 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     protected MainDb mainDb;
     public int wordCount = 0;
     FragmentManager fragmentManager;
-
     public String mainTextView;
     public String translateText;
 
     public static final String TAG = "LessonTenWordFragment";
-    private TextView twitts;
 
     protected ExamplesDb examplesDb;
 
@@ -108,9 +97,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
 
         View v = inflater.inflate(R.layout.fragment_lesson_ten_word, container, false);
         Resources res = getResources();
-        //tintManager.setStatusBarTintColor(getResources().getColor(R.color.colorPrimaryDark));
         mainDataTextView = (TextView)v.findViewById(R.id.mainOwnDataTextView);
-        twitts = (TextView) v.findViewById(R.id.twitts);
 
         translate =         (TextView)v.findViewById(R.id.translat);
         countWord =         (TextView)v.findViewById(R.id.countWord);
@@ -182,14 +169,11 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     public void parseExamples() {
         if(!examplesDb.isRowExists(mainDataTextView.getText().toString()))
             new ParseUrl().execute(mainDataTextView.getText().toString());
-        else {
-            if(!findWord(examplesDb.getWord(mainDataTextView.getText().toString())).isEmpty()) {
-                String one = findWord(examplesDb.getWord(mainDataTextView.getText().toString())).get(0);
-                String two = "<font color='#ffffff'>"+findWord(examplesDb.getWord(mainDataTextView.getText().toString())).get(1)+"</font>";
-                String three = findWord(examplesDb.getWord(mainDataTextView.getText().toString())).get(2);
-                twitts.setText(Html.fromHtml(one + " " + two + " " + three));
-            }
-        }
+        /*else {
+            String one = findWord(examplesDb.getWord(mainDataTextView.getText().toString())).get(0);
+            String two = "<font color='#ffffff'>"+findWord(examplesDb.getWord(mainDataTextView.getText().toString())).get(1)+"</font>";
+            String three = findWord(examplesDb.getWord(mainDataTextView.getText().toString())).get(2);
+        }*/
     }
     @Override
     public void onPause() {
@@ -209,8 +193,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
         if(fSize > 30) fSize = 30;
         mainDataTextView.setTextSize(fSize);
     }
-
-    private String removeUrl(String commentstr)
+    /*private String removeUrl(String commentstr)
     {
         String urlPattern = "((https?|ftp|gopher|telnet|file|Unsure|http):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
         Pattern p = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
@@ -247,9 +230,9 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
             i++;
         }
         return commentstr;
-    }
+    }*/
 
-    public void getTweet() {
+    /*public void getTweet() {
         final SearchTimeline searchTimeline = new SearchTimeline.Builder()
                 .query(mainDataTextView.getText().toString())
                 .build();
@@ -260,7 +243,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
             public void success(Result<TimelineResult<Tweet>> result) {
                 if (!result.data.items.isEmpty()) {
                     String rowString = result.data.items.get(0).text;
-                    twitts.setText(removeDog(removeNotEnglish(removeUrl(rowString))));
+                    //twitts.setText(removeDog(removeNotEnglish(removeUrl(rowString))));
                 } else {
                     Toast.makeText(getActivity(), "empty", Toast.LENGTH_SHORT).show();
                 }
@@ -271,7 +254,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                 Toast.makeText(getActivity(), "failure", Toast.LENGTH_SHORT).show();
             }
         });
-    }
+    }*/
 
     /*******************************************************************************************/
     private void toChangeWords() {
@@ -393,12 +376,9 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
     /***********************************************************************************/
     private void font() {
         Typeface mainFont = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFONT);
-        //exerciseButton.setTypeface(mainFont);
         translate.setTypeface(mainFont);
-        //voiceButton.setTypeface(mainFont);
         mainDataTextView.setTypeface(mainFont);
         countWord.setTypeface(mainFont);
-        twitts.setTypeface(mainFont);
     }
     /***************************************************************************************/
 
