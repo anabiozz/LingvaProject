@@ -1,6 +1,11 @@
-.gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
 .DS_Store
 /build
+app/src/androidTest/
+/.gitignore
+/.idea/
+/.gradle/
+/gradle.properties
+/app/app.iml
+/app/fabric.properties
+/app/proguard-rules.pro
