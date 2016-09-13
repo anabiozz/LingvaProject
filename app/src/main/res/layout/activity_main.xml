@@ -5,15 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="@drawable/materialportret">
+    android:background="@drawable/background">
 
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
         android:id="@+id/activity"
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:fitsSystemWindows="true"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        >
 
         <android.support.v7.widget.Toolbar
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,11 +24,30 @@
             android:background="@color/colorPrimary">
         </android.support.v7.widget.Toolbar>
 
-        <FrameLayout
-            android:id="@+id/content_frame"
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        </LinearLayout>
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/content_frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </android.support.design.widget.CoordinatorLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+   <!-- <LinearLayout
+        android:id="@+id/activity"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:fitsSystemWindows="true"
+        android:layout_height="match_parent">
+
+    </LinearLayout>-->
+
+
 
     <LinearLayout
         android:id="@+id/header_progress"

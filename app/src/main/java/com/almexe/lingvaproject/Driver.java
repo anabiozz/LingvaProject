@@ -5,11 +5,14 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,10 +39,6 @@ import com.almexe.lingvaproject.utils.Constants;
 import com.almexe.lingvaproject.utils.CustomTypefaceSpan;
 import com.almexe.lingvaproject.utils.InitialService;
 import com.almexe.lingvaproject.utils.Utils;
-import com.twitter.sdk.android.Twitter;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
-
-import io.fabric.sdk.android.Fabric;
 
 public class Driver extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -52,8 +52,6 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
     boolean mBounded;
     InitialService initialService;
     Utils utils;
-    private static final String TWITTER_KEY = "ab3HXTn6fXUXVLEEubs5ZXV9Q";
-    private static final String TWITTER_SECRET = "pJn6repBWuSYwnclFDzWTMBANQ3pdZ9I6Ph5CCRb58q3nktRtb";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +59,10 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         setContentView(R.layout.activity_main);
 
         utils = new Utils();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
 
         // load saved navigation state if present
         if (null == savedInstanceState) {

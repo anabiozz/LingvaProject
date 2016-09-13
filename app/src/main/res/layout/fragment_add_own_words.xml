@@ -27,7 +27,7 @@
                 android:id="@+id/foreign_word_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/MyColor">
+                android:theme="@style/WidgetColor">
 
                 <AutoCompleteTextView
                     android:id="@+id/foreign_word"
@@ -46,7 +46,7 @@
                 android:id="@+id/nativ_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/MyColor">
+                android:theme="@style/WidgetColor">
 
             <AutoCompleteTextView
                 android:id="@+id/nativ_word"
