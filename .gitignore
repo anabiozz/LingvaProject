@@ -4,8 +4,10 @@
 app/src/androidTest/
 /.gitignore
 /.idea/
-/.gradle/
 /gradle.properties
 /app/app.iml
 /app/fabric.properties
 /app/proguard-rules.pro
+/gradlew
+/gradlew.bat
+/.gradle/
