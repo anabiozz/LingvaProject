@@ -112,7 +112,7 @@ public class InitialService extends Service{
                         while (mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN) != 10) {
                             for (int i = 0; i < 10; i++) {
                                 int result = mainDbForUser.getNotLearnedWords(i, Tables.getTableMain());
-                                mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
+                                mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeignWord(mainDb.getWord(result, 2)));
                             }
                         }
                     }

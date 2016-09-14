@@ -9,6 +9,7 @@ import com.almexe.lingvaproject.db.MainDbForUser;
 import com.almexe.lingvaproject.pages.BaseFragment;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.UpdateInfo;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;

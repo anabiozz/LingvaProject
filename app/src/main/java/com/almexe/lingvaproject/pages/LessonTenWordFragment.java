@@ -37,6 +37,7 @@ import com.almexe.lingvaproject.utils.ParseUrl;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.UpdateInfo;
 import com.almexe.lingvaproject.utils.Utils;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.ispeech.SpeechSynthesis;
 import org.ispeech.error.BusyException;
@@ -404,7 +405,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
             while (mainDbForUser.getCountWordsFromTableWhereColumnEqualsOne(Tables.getTableMain(), MainDbForUser.TEN) < 10) {
                 for (int i = 0; i < 10; i++) {
                     int result = mainDbForUser.getNotLearnedWords(i, Tables.getTableMain());
-                    mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeginWord(mainDb.getWord(result, 2)));
+                    mainDbForUser.update(Tables.getTableMain(), MainDbForUser.TEN, mainDb.getIdForeignWord(mainDb.getWord(result, 2)));
                 }
             }
             return null;
@@ -439,7 +440,7 @@ public class LessonTenWordFragment extends Fragment implements OnClickListener {
                 if(wordFromTextView.equals(mainDb.getNativeWord(wordFromTextView)))
                     mainDbForUser.update(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdNativeWord(wordFromTextView));
                 else
-                    mainDbForUser.update(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(wordFromTextView));
+                    mainDbForUser.update(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeignWord(wordFromTextView));
 
                 utils.myToast(getActivity(),getActivity().getLayoutInflater(),getView(),
                         "ДОБАВЛЕНО В СЛОВАРЬ", Toast.LENGTH_SHORT);

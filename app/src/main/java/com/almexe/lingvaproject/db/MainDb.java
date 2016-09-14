@@ -323,7 +323,7 @@ public class MainDb extends SQLiteOpenHelper {
         return result;
     }
 
-    public int getIdForeginWord(String word) {
+    public int getIdForeignWord(String word) {
         String selectQuery = "SELECT _id FROM " + TABLE + " WHERE " + FOREGIN_WORD + " = '" + word + "' ";
         helper = new MainDb(mContext);
         myDataBase = helper.getReadableDatabase();
