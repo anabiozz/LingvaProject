@@ -125,7 +125,7 @@ public class AddOwnWordsFragment extends BaseFragment implements OnClickListener
                             getActivity().getString(R.string.TOAST_MESSAGE_NO), Toast.LENGTH_SHORT);
                 } else {
 
-                    mainDbForUser.update(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(textFW));
+                    mainDbForUser.update(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeignWord(textFW));
 
                     foreignWordEditText.setText(null);
                     nativWordEditText.setText(null);

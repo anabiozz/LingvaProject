@@ -1,5 +1,6 @@
 package com.almexe.lingvaproject.pages;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.Service;
 import android.content.ComponentName;
@@ -28,9 +29,10 @@ import com.almexe.lingvaproject.utils.InitialService;
 import com.almexe.lingvaproject.utils.Tables;
 import com.almexe.lingvaproject.utils.Utils;
 import com.almexe.lingvaproject.utils.VKRegistration;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.vk.sdk.VKScope;
 
-public class StartFragment extends Fragment {
+public class StartFragment extends Activity {
 
     private static final String TAG = "StartFragment";
     protected Utils utils;
@@ -39,11 +41,15 @@ public class StartFragment extends Fragment {
     public StartFragment(){}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        View v = inflater.inflate(R.layout.fragment_start, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        // enable status bar tint
+        tintManager.setStatusBarTintEnabled(true);
+        // enable navigation bar tint
+        tintManager.setNavigationBarTintEnabled(true);
+        // set the transparent color of the status bar, 20% darker
+        tintManager.setTintColor(R.color.colorPrimaryDark);
         Log.e(TAG, "onCreate");
-        return v;
     }
 }

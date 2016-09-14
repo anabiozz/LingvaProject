@@ -130,7 +130,7 @@ public class WrongResultCheckFragment extends Fragment implements View.OnClickLi
             }
 
             for(int i = 0; i < list.size(); i++){
-                mainDbForUser.update(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeginWord(list.get(i)));
+                mainDbForUser.update(Tables.getTableMain(), MainDbForUser.OWN, mainDb.getIdForeignWord(list.get(i)));
             }
             return null;
         }
