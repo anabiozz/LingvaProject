@@ -61,12 +61,11 @@ public class Driver extends AppCompatActivity  implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Window w = getWindow(); // in Activity's onCreate() for instance
+        Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setNavigationBarTintEnabled(true);
         tintManager.setTintColor(Color.parseColor("#90000000"));
